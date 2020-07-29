@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
+import 'API/saavn.dart';
 
 String status = 'hidden';
-String kUrl = "", checker, image, title, album, artist;
 Color accent = Colors.lightGreenAccent[700];
 
 typedef void OnError(Exception exception);
@@ -28,11 +28,9 @@ class AudioAppState extends State<AudioApp> {
   get isPlaying => playerState == PlayerState.playing;
   get isPaused => playerState == PlayerState.paused;
 
-  get durationText =>
-      duration != null ? duration.toString().split('.').first : '';
+  get durationText => duration != null ? duration.toString().split('.').first : '';
 
-  get positionText =>
-      position != null ? position.toString().split('.').first : '';
+  get positionText => position != null ? position.toString().split('.').first : '';
 
   bool isMuted = false;
 
@@ -87,11 +85,9 @@ class AudioAppState extends State<AudioApp> {
       }
     });
 
-    _positionSubscription = audioPlayer.onAudioPositionChanged
-        .listen((p) => setState(() => position = p));
+    _positionSubscription = audioPlayer.onAudioPositionChanged.listen((p) => setState(() => position = p));
 
-    _audioPlayerStateSubscription =
-        audioPlayer.onPlayerStateChanged.listen((s) {
+    _audioPlayerStateSubscription = audioPlayer.onPlayerStateChanged.listen((s) {
       if (s == AudioPlayerState.PLAYING) {
         setState(() => duration = audioPlayer.duration);
       } else if (s == AudioPlayerState.STOPPED) {
@@ -111,8 +107,7 @@ class AudioAppState extends State<AudioApp> {
 
   Future play() async {
     await audioPlayer.play(kUrl);
-    MediaNotification.showNotification(
-        title: title, author: artist, artUri: image, isPlaying: true);
+    MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: true);
 
     setState(() {
       playerState = PlayerState.playing;
@@ -121,8 +116,7 @@ class AudioAppState extends State<AudioApp> {
 
   Future pause() async {
     await audioPlayer.pause();
-    MediaNotification.showNotification(
-        title: title, author: artist, artUri: image, isPlaying: false);
+    MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: false);
     setState(() {
       playerState = PlayerState.paused;
     });
@@ -157,8 +151,7 @@ class AudioAppState extends State<AudioApp> {
           centerTitle: true,
           title: Text(
             "Musify",
-            style: TextStyle(
-                color: accent, fontSize: 25, fontWeight: FontWeight.w500),
+            style: TextStyle(color: accent, fontSize: 25, fontWeight: FontWeight.w500),
           ),
           leading: Padding(
             padding: const EdgeInsets.only(left: 14.0),
@@ -184,19 +177,13 @@ class AudioAppState extends State<AudioApp> {
                     decoration: new BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         shape: BoxShape.rectangle,
-                        image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: new NetworkImage(
-                                image.replaceAll("150x150", "500x500"))))),
+                        image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(image.replaceAll("150x150", "500x500"))))),
                 Padding(
                   padding: const EdgeInsets.only(top: 35.0, bottom: 35),
                   child: new Text(
                     title.replaceAll("&amp;", "&"),
                     textScaleFactor: 2.5,
-                    style: TextStyle(
-                        color: accent,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500),
+                    style: TextStyle(color: accent, fontSize: 11, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Material(color: Colors.black, child: _buildPlayer()),
@@ -231,9 +218,7 @@ class AudioAppState extends State<AudioApp> {
                 isPlaying
                     ? Container()
                     : Container(
-                        decoration: BoxDecoration(
-                            color: accent,
-                            borderRadius: BorderRadius.circular(100)),
+                        decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
                         child: IconButton(
                           onPressed: isPlaying ? null : () => play(),
                           iconSize: 40.0,
@@ -243,9 +228,7 @@ class AudioAppState extends State<AudioApp> {
                       ),
                 isPlaying
                     ? Container(
-                        decoration: BoxDecoration(
-                            color: accent,
-                            borderRadius: BorderRadius.circular(100)),
+                        decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
                         child: IconButton(
                           onPressed: isPlaying ? () => pause() : null,
                           iconSize: 40.0,
@@ -262,16 +245,12 @@ class AudioAppState extends State<AudioApp> {
 
   Row _buildProgressView() => Row(mainAxisSize: MainAxisSize.min, children: [
         Text(
-          position != null
-              ? "${positionText ?? ''} ".replaceFirst("0:0", "0")
-              : duration != null ? durationText : '',
+          position != null ? "${positionText ?? ''} ".replaceFirst("0:0", "0") : duration != null ? durationText : '',
           style: TextStyle(fontSize: 18.0, color: Colors.green[50]),
         ),
         Spacer(),
         Text(
-          position != null
-              ? "${durationText ?? ''}".replaceAll("0:", "")
-              : duration != null ? durationText : '',
+          position != null ? "${durationText ?? ''}".replaceAll("0:", "") : duration != null ? durationText : '',
           style: TextStyle(fontSize: 18.0, color: Colors.green[50]),
         )
       ]);
