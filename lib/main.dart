@@ -4,13 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:audiotagger/audiotagger.dart';
 import 'package:audiotagger/models/tag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:music/API/saavn.dart';
+import 'package:music/about.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'music.dart';
 
 main() async {
   runApp(MaterialApp(
-    theme: ThemeData(accentColor: accent, primaryColor: accent),
+    theme: ThemeData(
+      accentColor: accent,
+      primaryColor: accent,
+      canvasColor: Colors.transparent,
+    ),
     home: AppName(),
   ));
 }
@@ -25,13 +31,40 @@ class AppName extends StatefulWidget {
 class AppState extends State<AppName> {
   TextEditingController searchBar = new TextEditingController();
 
+  void initState() {
+    super.initState();
+
+    MediaNotification.setListener('play', () {
+      setState(() {
+        playerState = PlayerState.playing;
+        status = 'play';
+        audioPlayer.play(kUrl);
+      });
+    });
+
+    MediaNotification.setListener('pause', () {
+      setState(() {
+        status = 'pause';
+        audioPlayer.pause();
+      });
+    });
+
+    MediaNotification.setListener("close", () {
+      audioPlayer.stop();
+      dispose();
+      checker = "Nahi";
+      MediaNotification.hideNotification();
+    });
+  }
+
   search(searchQuery) async {
-    fetchSongsList(searchQuery);
+    await fetchSongsList(searchQuery);
     setState(() {});
   }
 
   getSongDetails(String id, var context) async {
-    fetchSongDetails(id);
+    await fetchSongDetails(id);
+    checker = "Haa";
     Navigator.push(context, MaterialPageRoute(builder: (context) => AudioApp()));
   }
 
@@ -44,7 +77,7 @@ class AppState extends State<AppName> {
       showLogs: false,
     );
 
-    fetchSongDetails(id);
+    await fetchSongDetails(id);
 
     pr.style(
       backgroundColor: Color.fromARGB(255, 20, 20, 20),
@@ -84,6 +117,7 @@ class AppState extends State<AppName> {
       artist: artist,
       artwork: filepath2,
       album: album,
+      lyrics: lyrics,
       genre: null,
     );
 
@@ -136,10 +170,19 @@ class AppState extends State<AppName> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Padding(padding: EdgeInsets.only(top: 30, bottom: 20.0)),
-              new Text(
-                "Musify.",
-                style: TextStyle(color: accent, fontSize: 35, fontWeight: FontWeight.bold),
-              ),
+              Row(children: <Widget>[
+                new Text(
+                  "Musify.",
+                  style: TextStyle(color: accent, fontSize: 35, fontWeight: FontWeight.bold),
+                ),
+                Spacer(),
+                IconButton(
+                    icon: Icon(Icons.info_outline),
+                    color: accent,
+                    onPressed: () => {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage())),
+                        })
+              ]),
               new Padding(padding: EdgeInsets.only(top: 20)),
               new TextField(
                 onSubmitted: (String value) {

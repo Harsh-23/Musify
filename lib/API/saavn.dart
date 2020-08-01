@@ -3,7 +3,7 @@ import 'package:des_plugin/des_plugin.dart';
 import 'package:http/http.dart' as http;
 
 List searchedList = [];
-String kUrl = "", checker, image, title, album, artist;
+String kUrl = "", checker, image, title, album, artist, lyrics;
 String key = "38346591";
 String decrypt = "";
 
@@ -24,15 +24,24 @@ Future fetchSongDetails(songId) async {
   var resEdited = (res.body).split("-->");
   var getMain = json.decode(resEdited[1]);
 
-  title = (getMain[songUrl]["title"]).toString().split("(")[0];
-  image = (getMain[songUrl]["image"]);
-  artist = (getMain[songUrl]["more_info"]["artistMap"]["primary_artists"][0]["name"]);
-  album = (getMain[songId]["more_info"]["album"]).toString().replaceAll("&quot;", "\"");
+  title = (getMain[songId]["title"]).toString().split("(")[0].replaceAll("&amp;", "&");
+  image = (getMain[songId]["image"]);
+  artist = (getMain[songId]["more_info"]["artistMap"]["primary_artists"][0]["name"]);
+  album = (getMain[songId]["more_info"]["album"]).toString().replaceAll("&quot;", "\"").replaceAll("&amp;", "&");
 
-  kUrl = await DesPlugin.decrypt(key, getMain[songUrl]["more_info"]["encrypted_media_url"]);
+  String lyricsUrl = "https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&lyrics_id=" + songId + "&ctx=web6dot0&api_version=4&_format=json";
+  var lyricsRes = await http.get(lyricsUrl, headers: {"Accept": "application/json"});
+  var lyricsEdited = (lyricsRes.body).split("-->");
+  var fetchedLyrics = json.decode(lyricsEdited[1]);
+
+  lyrics = fetchedLyrics["lyrics"].toString().replaceAll("<br>", "\n");
+
+  kUrl = await DesPlugin.decrypt(key, getMain[songId]["more_info"]["encrypted_media_url"]);
   kUrl = kUrl
       .replaceAll("aac.saavncdn.com", "h.saavncdn.com")
       .replaceAll("c.saavncdn.com", "h.saavncdn.com")
       .replaceAll("_96.mp4", "_320.mp3")
       .replaceAll("https://", "https://snoidcdnems01.cdnsrv.jio.com/");
+
+  print(kUrl);
 }

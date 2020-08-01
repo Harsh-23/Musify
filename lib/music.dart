@@ -6,6 +6,9 @@ import 'API/saavn.dart';
 
 String status = 'hidden';
 Color accent = Colors.lightGreenAccent[700];
+Color accent_light = Colors.lightGreen[50];
+AudioPlayer audioPlayer;
+PlayerState playerState;
 
 typedef void OnError(Exception exception);
 
@@ -20,10 +23,6 @@ class AudioApp extends StatefulWidget {
 class AudioAppState extends State<AudioApp> {
   Duration duration;
   Duration position;
-
-  AudioPlayer audioPlayer;
-
-  PlayerState playerState;
 
   get isPlaying => playerState == PlayerState.playing;
   get isPaused => playerState == PlayerState.paused;
@@ -42,28 +41,6 @@ class AudioAppState extends State<AudioApp> {
     super.initState();
 
     initAudioPlayer();
-    MediaNotification.setListener('pause', () {
-      setState(() {
-        status = 'pause';
-        pause();
-      });
-    });
-
-    MediaNotification.setListener('play', () {
-      setState(() {
-        playerState = PlayerState.playing;
-        status = 'play';
-        play();
-      });
-    });
-
-    MediaNotification.setListener('select', () {});
-
-    MediaNotification.setListener("close", () {
-      stop();
-      dispose();
-      MediaNotification.hideNotification();
-    });
   }
 
   @override
@@ -180,10 +157,19 @@ class AudioAppState extends State<AudioApp> {
                         image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(image.replaceAll("150x150", "500x500"))))),
                 Padding(
                   padding: const EdgeInsets.only(top: 35.0, bottom: 35),
-                  child: new Text(
-                    title.replaceAll("&amp;", "&"),
-                    textScaleFactor: 2.5,
-                    style: TextStyle(color: accent, fontSize: 11, fontWeight: FontWeight.w500),
+                  child: Column(
+                    children: <Widget>[
+                      new Text(
+                        title,
+                        textScaleFactor: 2.5,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: accent, fontSize: 11, fontWeight: FontWeight.w600),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(album + "  |  " + artist, style: TextStyle(color: accent_light, fontSize: 15, fontWeight: FontWeight.w500)),
+                      ),
+                    ],
                   ),
                 ),
                 Material(color: Colors.black, child: _buildPlayer()),
@@ -195,7 +181,7 @@ class AudioAppState extends State<AudioApp> {
 
   Widget _buildPlayer() => Container(
         color: Colors.black,
-        padding: EdgeInsets.only(top: 25.0, left: 16, right: 16, bottom: 16),
+        padding: EdgeInsets.only(top: 15.0, left: 16, right: 16, bottom: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -214,30 +200,115 @@ class AudioAppState extends State<AudioApp> {
             if (position != null) _buildProgressView(),
             Padding(
               padding: const EdgeInsets.only(top: 18.0),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                isPlaying
-                    ? Container()
-                    : Container(
-                        decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
-                        child: IconButton(
-                          onPressed: isPlaying ? null : () => play(),
-                          iconSize: 40.0,
-                          icon: Icon(Icons.play_arrow),
-                          color: Colors.black,
-                        ),
-                      ),
-                isPlaying
-                    ? Container(
-                        decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
-                        child: IconButton(
-                          onPressed: isPlaying ? () => pause() : null,
-                          iconSize: 40.0,
-                          icon: Icon(Icons.pause),
-                          color: Colors.black,
-                        ),
-                      )
-                    : Container()
-              ]),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      isPlaying
+                          ? Container()
+                          : Container(
+                              decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
+                              child: IconButton(
+                                onPressed: isPlaying ? null : () => play(),
+                                iconSize: 40.0,
+                                icon: Icon(Icons.play_arrow),
+                                color: Colors.black,
+                              ),
+                            ),
+                      isPlaying
+                          ? Container(
+                              decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
+                              child: IconButton(
+                                onPressed: isPlaying ? () => pause() : null,
+                                iconSize: 40.0,
+                                icon: Icon(Icons.pause),
+                                color: Colors.black,
+                              ),
+                            )
+                          : Container()
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: Builder(builder: (context) {
+                      return FlatButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                          color: Color(0xFF0b210d),
+                          hoverColor: Colors.green[900],
+                          focusColor: Colors.green[900],
+                          splashColor: Colors.green[900],
+                          disabledColor: Color(0xFF0b210d),
+                          onPressed: () {
+                            showBottomSheet(
+                                context: context,
+                                builder: (context) => Container(
+                                      decoration:
+                                          new BoxDecoration(color: Colors.grey[900], borderRadius: new BorderRadius.only(topLeft: const Radius.circular(18.0), topRight: const Radius.circular(18.0))),
+                                      height: 400,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 10.0),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  IconButton(
+                                                      icon: Icon(
+                                                        Icons.arrow_back_ios,
+                                                        color: accent,
+                                                        size: 20,
+                                                      ),
+                                                      onPressed: () => {Navigator.pop(context)}),
+                                                  Text(
+                                                    "Lyrics",
+                                                    style: TextStyle(
+                                                      color: accent,
+                                                      fontSize: 30,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            lyrics != "null"
+                                                ? Padding(
+                                                    padding: const EdgeInsets.all(6.0),
+                                                    child: Container(
+                                                      child: new Text(
+                                                        lyrics,
+                                                        style: new TextStyle(
+                                                          fontSize: 16.0,
+                                                          color: accent_light,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ))
+                                                : Padding(
+                                                    padding: const EdgeInsets.only(top: 120.0),
+                                                    child: Center(
+                                                      child: Container(
+                                                        child: Text(
+                                                          "No Lyrics available ;(",
+                                                          style: TextStyle(color: accent_light, fontSize: 25),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                          },
+                          child: Text(
+                            "Lyrics",
+                            style: TextStyle(color: accent),
+                          ));
+                    }),
+                  )
+                ],
+              ),
             ),
           ],
         ),
