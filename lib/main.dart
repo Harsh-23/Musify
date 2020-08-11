@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:music/API/saavn.dart';
 import 'package:music/about.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'music.dart';
 
@@ -65,7 +66,8 @@ class AppState extends State<AppName> {
   getSongDetails(String id, var context) async {
     await fetchSongDetails(id);
     checker = "Haa";
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AudioApp()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AudioApp()));
   }
 
   downloadSong(id) async {
@@ -88,15 +90,19 @@ class AppState extends State<AppName> {
       messageTextStyle: TextStyle(color: accent),
       progressWidget: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(accent)),
+        child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(accent)),
       ),
     );
     await pr.show();
 
     final filename = title + ".mp3";
     final artname = title + "_artwork.jpg";
-    String filepath = "storage/emulated/0/Download/" + filename;
-    String filepath2 = "storage/emulated/0/Download/" + artname;
+
+    String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_MUSIC);
+    String filepath = dlPath + "/" + filename;
+    String filepath2 = dlPath + "/" + artname;
 
     var request = await HttpClient().getUrl(Uri.parse(kUrl));
     var response = await request.close();
@@ -129,6 +135,10 @@ class AppState extends State<AppName> {
     );
     await new Future.delayed(const Duration(seconds: 1), () {});
     await pr.hide();
+
+    if (await file2.exists()) {
+      await file2.delete();
+    }
     print("Done");
   }
 
@@ -153,7 +163,10 @@ class AppState extends State<AppName> {
                 else
                   Scaffold.of(contextt).showSnackBar(new SnackBar(
                     content: new Text("Nothing is Playing."),
-                    action: SnackBarAction(label: 'Okay', textColor: accent, onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
+                    action: SnackBarAction(
+                        label: 'Okay',
+                        textColor: accent,
+                        onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
                     backgroundColor: Color.fromARGB(255, 20, 20, 20),
                     duration: Duration(seconds: 2),
                   ))
@@ -173,14 +186,18 @@ class AppState extends State<AppName> {
               Row(children: <Widget>[
                 new Text(
                   "Musify.",
-                  style: TextStyle(color: accent, fontSize: 35, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: accent, fontSize: 35, fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
                 IconButton(
                     icon: Icon(Icons.info_outline),
                     color: accent,
                     onPressed: () => {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage())),
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AboutPage())),
                         })
               ]),
               new Padding(padding: EdgeInsets.only(top: 20)),
@@ -230,12 +247,14 @@ class AppState extends State<AppName> {
                         padding: const EdgeInsets.only(top: 5, bottom: 5),
                         child: Card(
                           color: Color.fromARGB(255, 20, 20, 20),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
                           elevation: 0,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10.0),
                             onTap: () {
-                              getSongDetails(searchedList[index]["id"], context);
+                              getSongDetails(
+                                  searchedList[index]["id"], context);
                             },
                             splashColor: accent,
                             hoverColor: accent,
@@ -253,14 +272,20 @@ class AppState extends State<AppName> {
                                     ),
                                   ),
                                   title: Text(
-                                    (searchedList[index]['title']).toString().split("(")[0],
+                                    (searchedList[index]['title'])
+                                        .toString()
+                                        .split("(")[0],
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   subtitle: Text(
                                     searchedList[index]['more_info']["singers"],
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  trailing: IconButton(color: accent, icon: Icon(Icons.file_download), onPressed: () => downloadSong(searchedList[index]["id"])),
+                                  trailing: IconButton(
+                                      color: accent,
+                                      icon: Icon(Icons.file_download),
+                                      onPressed: () => downloadSong(
+                                          searchedList[index]["id"])),
                                 ),
                               ],
                             ),
