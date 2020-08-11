@@ -34,23 +34,30 @@ Future fetchSongDetails(songId) async {
       .split("(")[0]
       .replaceAll("&amp;", "&");
   image = (getMain[songId]["image"]);
-  artist =
-      (getMain[songId]["more_info"]["artistMap"]["primary_artists"][0]["name"]);
+  artist = (getMain[songId]["more_info"]["artistMap"]["primary_artists"][0]
+          ["name"])
+      .toString()
+      .replaceAll("&quot;", "\"")
+      .replaceAll("&amp;", "&");
   album = (getMain[songId]["more_info"]["album"])
       .toString()
       .replaceAll("&quot;", "\"")
       .replaceAll("&amp;", "&");
 
-  String lyricsUrl =
-      "https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&lyrics_id=" +
-          songId +
-          "&ctx=web6dot0&api_version=4&_format=json";
-  var lyricsRes =
-      await http.get(lyricsUrl, headers: {"Accept": "application/json"});
-  var lyricsEdited = (lyricsRes.body).split("-->");
-  var fetchedLyrics = json.decode(lyricsEdited[1]);
+  if (getMain[songId]["more_info"]["has_lyrics"] == "true") {
+    String lyricsUrl =
+        "https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&lyrics_id=" +
+            songId +
+            "&ctx=web6dot0&api_version=4&_format=json";
+    var lyricsRes =
+        await http.get(lyricsUrl, headers: {"Accept": "application/json"});
+    var lyricsEdited = (lyricsRes.body).split("-->");
+    var fetchedLyrics = json.decode(lyricsEdited[1]);
 
-  lyrics = fetchedLyrics["lyrics"].toString().replaceAll("<br>", "\n");
+    lyrics = fetchedLyrics["lyrics"].toString().replaceAll("<br>", "\n");
+  } else {
+    lyrics = "null";
+  }
 
   kUrl = await DesPlugin.decrypt(
       key, getMain[songId]["more_info"]["encrypted_media_url"]);
