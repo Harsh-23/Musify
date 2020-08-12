@@ -96,14 +96,13 @@ class AppState extends State<AppName> {
     );
     await pr.show();
 
-    final filename = title + ".mp3";
+    final filename = title + ".m4a";
     final artname = title + "_artwork.jpg";
 
     String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
         ExtStorage.DIRECTORY_MUSIC);
     String filepath = dlPath + "/" + filename;
     String filepath2 = dlPath + "/" + artname;
-
     var request = await HttpClient().getUrl(Uri.parse(kUrl));
     var response = await request.close();
     var bytes = await consolidateHttpClientResponseBytes(response);
