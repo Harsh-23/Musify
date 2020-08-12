@@ -32,8 +32,9 @@ Future fetchSongDetails(songId) async {
   title = (getMain[songId]["title"])
       .toString()
       .split("(")[0]
-      .replaceAll("&amp;", "&");
-  image = (getMain[songId]["image"]);
+      .replaceAll("&amp;", "&")
+      .replaceAll("&quot;", "\"");
+  image = (getMain[songId]["image"]).replaceAll("150x150", "500x500");
   artist = (getMain[songId]["more_info"]["artistMap"]["primary_artists"][0]
           ["name"])
       .toString()
@@ -63,8 +64,11 @@ Future fetchSongDetails(songId) async {
       key, getMain[songId]["more_info"]["encrypted_media_url"]);
   kUrl = kUrl
       .replaceAll("aac.saavncdn.com", "h.saavncdn.com")
-      .replaceAll("c.saavncdn.com", "h.saavncdn.com")
-      .replaceAll("_96.mp4", "_320.mp3");
+      .replaceAll("c.saavncdn.com", "h.saavncdn.com");
+
+  if (getMain[songId]["more_info"]["320kbps"] == "true") {
+    kUrl = kUrl.replaceAll("_96.mp4", "_320.mp4");
+  }
 
   final client = http.Client();
   final request = new http.Request('GET', Uri.parse(kUrl))
