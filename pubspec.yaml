@@ -36,10 +36,13 @@ dependencies:
   audiotagger: ^1.1.0
   path_provider: ^1.6.11
   progress_dialog: ^1.2.4
+  gradient_widgets: ^0.5.2
+  material_design_icons_flutter: 4.0.5345
+  url_launcher: ^5.4.11
   flutter_media_notification:
     git:
-      url: https://github.com/terryBaz/flutter_media_notification.git
-      ref: adaptation/personalize
+      url: https://github.com/Sj-Projects/flutter_media_notification.git
+      ref: master
 
 
 dev_dependencies:
@@ -56,6 +59,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: fonts/DMSans-Bold.ttf
+        - asset: fonts/DMSans-Italic.ttf
+        - asset: fonts/DMSans-Regular.ttf
+        - asset: fonts/DMSans-Medium.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

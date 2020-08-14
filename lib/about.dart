@@ -1,26 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:music/music.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+_launchURL(url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.dark,
-        title: Text(
-          "About",
-          style: TextStyle(color: accent, fontSize: 20),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff384850),
+            Color(0xff263238),
+            Color(0xff263238),
+            //Color(0xff61e88a),
+          ],
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: accent,
-          ),
-          onPressed: () => Navigator.pop(context, false),
-        ),
-        backgroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(child: AboutCards()),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          brightness: Brightness.dark,
+          centerTitle: true,
+          title: GradientText(
+            "About",
+            shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+            gradient: LinearGradient(colors: [
+              Color(0xff4db6ac),
+              Color(0xff61e88a),
+            ]),
+            style: TextStyle(color: accent, fontSize: 25, fontWeight: FontWeight.w700),
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: accent,
+            ),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(child: AboutCards()),
+      ),
     );
   }
 }
@@ -36,17 +69,16 @@ class AboutCards extends StatelessWidget {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Icon(
-                  Icons.music_note,
-                  size: 100,
-                  color: accent,
+                title: Image.network(
+                  "https://telegra.ph/file/4798f3a9303b8300e4b5b.png",
+                  height: 120,
                 ),
                 subtitle: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(13.0),
                     child: Center(
                       child: Text(
                         "Musify  | 2.0.0",
-                        style: TextStyle(color: accent_light, fontSize: 24),
+                        style: TextStyle(color: accent_light, fontSize: 24, fontWeight: FontWeight.w600),
                       ),
                     )),
               ),
@@ -63,43 +95,81 @@ class AboutCards extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
           child: Card(
-            color: Color.fromARGB(255, 20, 20, 20),
+            color: Color(0xff263238),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             elevation: 2.3,
             child: ListTile(
               leading: new Container(
                 height: 50,
                 width: 50,
-                child: Image.network(
-                  "https://telegra.ph/file/57612f81b4304b6bf7008.png",
-                ),
-                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                decoration: BoxDecoration(shape: BoxShape.circle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage("https://telegram.im/img/harshv23"))),
               ),
               title: Text('Harsh V23', style: TextStyle(color: accent_light)),
               subtitle: Text('App Developer', style: TextStyle(color: accent_light)),
+              trailing: Wrap(
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        MdiIcons.telegram,
+                        color: accent_light,
+                      ),
+                      tooltip: 'Contact on Twitter',
+                      onPressed: () {
+                        _launchURL("https://t.me/harshv23");
+                      }),
+                  IconButton(
+                      icon: Icon(
+                        MdiIcons.twitter,
+                        color: accent_light,
+                      ),
+                      tooltip: 'Contact on Twitter',
+                      onPressed: () {
+                        _launchURL("https://twitter.com/harshv23");
+                      }),
+                ],
+              ),
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
           child: Card(
-            color: Color.fromARGB(255, 20, 20, 20),
+            color: Color(0xff263238),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             elevation: 2.3,
             child: ListTile(
               leading: new Container(
                 width: 50.0,
                 height: 50,
-                child: Image.network(
-                  "https://telegra.ph/file/8347001fa79f85ae14ab5.png",
-                ),
-                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                decoration: BoxDecoration(shape: BoxShape.circle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage("https://telegram.im/img/cyberboysumanjay"))),
               ),
               title: Text(
                 'Sumanjay',
                 style: TextStyle(color: accent_light),
               ),
               subtitle: Text('App Developer', style: TextStyle(color: accent_light)),
+              trailing: Wrap(
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        MdiIcons.telegram,
+                        color: accent_light,
+                      ),
+                      tooltip: 'Contact on Twitter',
+                      onPressed: () {
+                        _launchURL("https://t.me/cyberboysumanjay");
+                      }),
+                  IconButton(
+                      icon: Icon(
+                        MdiIcons.twitter,
+                        color: accent_light,
+                      ),
+                      tooltip: 'Contact on Twitter',
+                      onPressed: () {
+                        _launchURL("https://twitter.com/cyberboysj");
+                      }),
+                ],
+              ),
             ),
           ),
         ),

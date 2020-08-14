@@ -5,15 +5,19 @@ import 'package:audiotagger/audiotagger.dart';
 import 'package:audiotagger/models/tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:music/API/saavn.dart';
 import 'package:music/about.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'music.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:flutter/services.dart';
 
 main() async {
   runApp(MaterialApp(
     theme: ThemeData(
+      fontFamily: "DMSans",
       accentColor: accent,
       primaryColor: accent,
       canvasColor: Colors.transparent,
@@ -34,6 +38,12 @@ class AppState extends State<AppName> {
 
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xff263238),
+      // navigation bar color
+      statusBarColor: Colors.transparent, // status bar color
+    ));
 
     MediaNotification.setListener('play', () {
       setState(() {
@@ -66,8 +76,7 @@ class AppState extends State<AppName> {
   getSongDetails(String id, var context) async {
     await fetchSongDetails(id);
     checker = "Haa";
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AudioApp()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AudioApp()));
   }
 
   downloadSong(id) async {
@@ -90,8 +99,7 @@ class AppState extends State<AppName> {
       messageTextStyle: TextStyle(color: accent),
       progressWidget: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(accent)),
+        child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(accent)),
       ),
     );
     await pr.show();
@@ -99,8 +107,7 @@ class AppState extends State<AppName> {
     final filename = title + ".m4a";
     final artname = title + "_artwork.jpg";
 
-    String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_MUSIC);
+    String dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
     String filepath = dlPath + "/" + filename;
     String filepath2 = dlPath + "/" + artname;
     var request = await HttpClient().getUrl(Uri.parse(kUrl));
@@ -143,157 +150,218 @@ class AppState extends State<AppName> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: Colors.black,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          child: Builder(builder: (contextt) {
-            return FloatingActionButton.extended(
-              onPressed: () => {
-                checker = "Nahi",
-                if (kUrl != "")
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AudioApp()),
-                    )
-                  }
-                else
-                  Scaffold.of(contextt).showSnackBar(new SnackBar(
-                    content: new Text("Nothing is Playing."),
-                    action: SnackBarAction(
-                        label: 'Okay',
-                        textColor: accent,
-                        onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
-                    backgroundColor: Color.fromARGB(255, 20, 20, 20),
-                    duration: Duration(seconds: 2),
-                  ))
-              },
-              tooltip: 'Increment',
-              icon: Icon(Icons.music_note),
-              label: Text("Now playing"),
-            );
-          }),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff384850),
+            Color(0xff263238),
+            Color(0xff263238),
+            //Color(0xff61e88a),
+          ],
         ),
-        body: new SingleChildScrollView(
-          padding: EdgeInsets.all(12.0),
-          child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              new Padding(padding: EdgeInsets.only(top: 30, bottom: 20.0)),
-              Row(children: <Widget>[
-                new Text(
-                  "Musify.",
-                  style: TextStyle(
-                      color: accent, fontSize: 35, fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                IconButton(
-                    icon: Icon(Icons.info_outline),
-                    color: accent,
-                    onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AboutPage())),
-                        })
-              ]),
-              new Padding(padding: EdgeInsets.only(top: 20)),
-              new TextField(
-                onSubmitted: (String value) {
-                  search(value);
-                },
-                controller: searchBar,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: accent,
-                ),
-                decoration: InputDecoration(
-                  fillColor: Color.fromARGB(255, 22, 22, 22),
-                  filled: true,
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromARGB(255, 22, 22, 22),
+      ),
+      child: new Scaffold(
+          resizeToAvoidBottomPadding: false,
+          backgroundColor: Colors.transparent,
+          //backgroundColor: Color(0xff384850),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Builder(builder: (contextt) {
+              return Container(
+                height: 50,
+                width: 180,
+                child: FloatingActionButton(
+                  isExtended: true,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(40)),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xff4db6ac),
+                          //Color(0xff00c754),
+                          Color(0xff61e88a),
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 130,
+                        child: Center(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                MdiIcons.musicNoteOutline,
+                                color: Colors.black,
+                              ),
+                              Text(
+                                " Now Playing",
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: accent),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.search,
-                    color: accent,
-                  ),
-                  border: InputBorder.none,
-                  hintText: "Search...",
-                  hintStyle: TextStyle(
-                    color: accent,
-                  ),
-                  contentPadding: const EdgeInsets.only(
-                    left: 16,
-                    right: 20,
-                    top: 14,
-                    bottom: 14,
-                  ),
+                  onPressed: () => {
+                    checker = "Nahi",
+                    if (kUrl != "")
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AudioApp()),
+                        )
+                      }
+                    else
+                      Scaffold.of(contextt).showSnackBar(new SnackBar(
+                        content: new Text("Nothing is Playing."),
+                        action: SnackBarAction(label: 'Okay', textColor: accent, onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
+                        backgroundColor: Colors.black38,
+                        duration: Duration(seconds: 2),
+                      ))
+                  },
+                  tooltip: 'Increment',
                 ),
-              ),
-              if (searchedList.isNotEmpty)
-                new ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: searchedList.length,
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      return new Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Card(
-                          color: Color.fromARGB(255, 20, 20, 20),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          elevation: 0,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(10.0),
-                            onTap: () {
-                              getSongDetails(
-                                  searchedList[index]["id"], context);
-                            },
-                            splashColor: accent,
-                            hoverColor: accent,
-                            focusColor: accent,
-                            highlightColor: accent,
-                            child: Column(
-                              children: <Widget>[
-                                ListTile(
-                                  leading: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      Icons.music_note,
-                                      size: 30,
-                                      color: accent,
-                                    ),
-                                  ),
-                                  title: Text(
-                                    (searchedList[index]['title'])
-                                        .toString()
-                                        .split("(")[0],
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  subtitle: Text(
-                                    searchedList[index]['more_info']["singers"],
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  trailing: IconButton(
-                                      color: accent,
-                                      icon: Icon(Icons.file_download),
-                                      onPressed: () => downloadSong(
-                                          searchedList[index]["id"])),
-                                ),
-                              ],
+              );
+            }),
+          ),
+          body: new SingleChildScrollView(
+            padding: EdgeInsets.all(12.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                new Padding(padding: EdgeInsets.only(top: 30, bottom: 20.0)),
+                Center(
+                  child: Row(children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 42.0),
+                        child: Center(
+                          child: new GradientText(
+                            "MUSIFY",
+                            shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+                            gradient: LinearGradient(colors: [
+                              Color(0xff4db6ac),
+                              Color(0xff61e88a),
+                            ]),
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
-                      );
-                    }),
-            ],
-          ),
-        ));
+                      ),
+                    ),
+                    Container(
+                      child: IconButton(
+                          iconSize: 26,
+                          alignment: Alignment.center,
+                          icon: Icon(MdiIcons.dotsVertical),
+                          color: accent,
+                          onPressed: () => {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage())),
+                              }),
+                    )
+                  ]),
+                ),
+                new Padding(padding: EdgeInsets.only(top: 20)),
+                new TextField(
+                  onSubmitted: (String value) {
+                    search(value);
+                  },
+                  controller: searchBar,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: accent,
+                  ),
+                  cursorColor: Colors.green[50],
+                  decoration: InputDecoration(
+                    fillColor: Color(0xff263238),
+                    filled: true,
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      borderSide: BorderSide(
+                        color: Color(0xff263238),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      borderSide: BorderSide(color: accent),
+                    ),
+                    suffixIcon: Icon(
+                      Icons.search,
+                      color: accent,
+                    ),
+                    border: InputBorder.none,
+                    hintText: "Search...",
+                    hintStyle: TextStyle(
+                      color: accent,
+                    ),
+                    contentPadding: const EdgeInsets.only(
+                      left: 18,
+                      right: 20,
+                      top: 14,
+                      bottom: 14,
+                    ),
+                  ),
+                ),
+                if (searchedList.isNotEmpty)
+                  new ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: searchedList.length,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        return new Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Card(
+                            color: Colors.black12,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                            elevation: 0,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(10.0),
+                              onTap: () {
+                                getSongDetails(searchedList[index]["id"], context);
+                              },
+                              splashColor: accent,
+                              hoverColor: accent,
+                              focusColor: accent,
+                              highlightColor: accent,
+                              child: Column(
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        MdiIcons.musicNoteOutline,
+                                        size: 30,
+                                        color: accent,
+                                        //child: Image.network("https://telegra.ph/file/cec5d1bf5c9ca1d866883.png"),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      (searchedList[index]['title']).toString().split("(")[0].replaceAll("&quot;", "\"").replaceAll("&amp;", "&"),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    subtitle: Text(
+                                      searchedList[index]['more_info']["singers"],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    trailing: IconButton(color: accent, icon: Icon(MdiIcons.downloadOutline), onPressed: () => downloadSong(searchedList[index]["id"])),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+              ],
+            ),
+          )),
+    );
   }
 }

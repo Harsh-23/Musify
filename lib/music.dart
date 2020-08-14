@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'API/saavn.dart';
 
 String status = 'hidden';
-Color accent = Colors.lightGreenAccent[700];
+Color accent = Color(0xff61e88a);
 Color accent_light = Colors.lightGreen[50];
 AudioPlayer audioPlayer;
 PlayerState playerState;
@@ -120,67 +122,89 @@ class AudioAppState extends State<AudioApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          brightness: Brightness.dark,
-          backgroundColor: Colors.black,
-          centerTitle: true,
-          title: Text(
-            "Musify",
-            style: TextStyle(color: accent, fontSize: 25, fontWeight: FontWeight.w500),
-          ),
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 14.0),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                size: 28,
-                color: accent,
-              ),
-              onPressed: () => Navigator.pop(context, false),
-            ),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff384850),
+            Color(0xff263238),
+            Color(0xff263238),
+            //Color(0xff61e88a),
+          ],
         ),
-        body: new Center(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                new Container(
-                    width: 350,
-                    height: 350,
-                    decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        shape: BoxShape.rectangle,
-                        image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(image.replaceAll("150x150", "500x500"))))),
-                Padding(
-                  padding: const EdgeInsets.only(top: 35.0, bottom: 35),
-                  child: Column(
-                    children: <Widget>[
-                      new Text(
-                        title,
-                        textScaleFactor: 2.5,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: accent, fontSize: 11, fontWeight: FontWeight.w600),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(album + "  |  " + artist, style: TextStyle(color: accent_light, fontSize: 15, fontWeight: FontWeight.w500)),
-                      ),
-                    ],
-                  ),
+      ),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            brightness: Brightness.dark,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            //backgroundColor: Color(0xff384850),
+            centerTitle: true,
+            title: GradientText(
+              "Now Playing",
+              shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+              gradient: LinearGradient(colors: [
+                Color(0xff4db6ac),
+                Color(0xff61e88a),
+              ]),
+              style: TextStyle(color: accent, fontSize: 25, fontWeight: FontWeight.w700),
+            ),
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 14.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  size: 28,
+                  color: accent,
                 ),
-                Material(color: Colors.black, child: _buildPlayer()),
-              ],
+                onPressed: () => Navigator.pop(context, false),
+              ),
             ),
           ),
-        ));
+          body: new Center(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  new Container(
+                      width: 350,
+                      height: 350,
+                      decoration: new BoxDecoration(borderRadius: BorderRadius.circular(8), shape: BoxShape.rectangle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(image)))),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 35.0, bottom: 35),
+                    child: Column(
+                      children: <Widget>[
+                        new GradientText(
+                          title,
+                          shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+                          gradient: LinearGradient(colors: [
+                            Color(0xff4db6ac),
+                            Color(0xff61e88a),
+                          ]),
+                          textScaleFactor: 2.5,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(album + "  |  " + artist, style: TextStyle(color: accent_light, fontSize: 15, fontWeight: FontWeight.w500)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Material(child: _buildPlayer()),
+                ],
+              ),
+            ),
+          )),
+    );
   }
 
   Widget _buildPlayer() => Container(
-        color: Colors.black,
         padding: EdgeInsets.only(top: 15.0, left: 16, right: 16, bottom: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -208,22 +232,41 @@ class AudioAppState extends State<AudioApp> {
                       isPlaying
                           ? Container()
                           : Container(
-                              decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff4db6ac),
+                                      //Color(0xff00c754),
+                                      Color(0xff61e88a),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(100)),
                               child: IconButton(
                                 onPressed: isPlaying ? null : () => play(),
                                 iconSize: 40.0,
-                                icon: Icon(Icons.play_arrow),
-                                color: Colors.black,
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(left: 2.2),
+                                  child: Icon(MdiIcons.playOutline),
+                                ),
+                                color: Color(0xff263238),
                               ),
                             ),
                       isPlaying
                           ? Container(
-                              decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(100)),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff4db6ac),
+                                      //Color(0xff00c754),
+                                      Color(0xff61e88a),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(100)),
                               child: IconButton(
                                 onPressed: isPlaying ? () => pause() : null,
                                 iconSize: 40.0,
-                                icon: Icon(Icons.pause),
-                                color: Colors.black,
+                                icon: Icon(MdiIcons.pause),
+                                color: Color(0xff263238),
                               ),
                             )
                           : Container()
@@ -234,17 +277,13 @@ class AudioAppState extends State<AudioApp> {
                     child: Builder(builder: (context) {
                       return FlatButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-                          color: Color(0xFF0b210d),
-                          hoverColor: Colors.green[900],
-                          focusColor: Colors.green[900],
-                          splashColor: Colors.green[900],
-                          disabledColor: Color(0xFF0b210d),
+                          color: Colors.black12,
                           onPressed: () {
                             showBottomSheet(
                                 context: context,
                                 builder: (context) => Container(
                                       decoration:
-                                          new BoxDecoration(color: Colors.grey[900], borderRadius: new BorderRadius.only(topLeft: const Radius.circular(18.0), topRight: const Radius.circular(18.0))),
+                                          new BoxDecoration(color: Color(0xff212c31), borderRadius: new BorderRadius.only(topLeft: const Radius.circular(18.0), topRight: const Radius.circular(18.0))),
                                       height: 400,
                                       child: SingleChildScrollView(
                                         child: Column(
