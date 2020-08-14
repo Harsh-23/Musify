@@ -10,9 +10,13 @@ import 'package:music/API/saavn.dart';
 import 'package:music/about.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'API/saavn.dart';
+import 'package:http/http.dart' as http;
 import 'music.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 main() async {
   runApp(MaterialApp(
@@ -76,76 +80,134 @@ class AppState extends State<AppName> {
   getSongDetails(String id, var context) async {
     await fetchSongDetails(id);
     checker = "Haa";
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AudioApp()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AudioApp()));
   }
 
   downloadSong(id) async {
-    ProgressDialog pr = ProgressDialog(context);
-    pr = ProgressDialog(
-      context,
-      type: ProgressDialogType.Normal,
-      isDismissible: false,
-      showLogs: false,
-    );
-
-    await fetchSongDetails(id);
-
-    pr.style(
-      backgroundColor: Color.fromARGB(255, 20, 20, 20),
-      elevation: 4,
-      textAlign: TextAlign.left,
-      progressTextStyle: TextStyle(color: Colors.white),
-      message: "Downloading " + title,
-      messageTextStyle: TextStyle(color: accent),
-      progressWidget: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(accent)),
-      ),
-    );
-    await pr.show();
-
-    final filename = title + ".m4a";
-    final artname = title + "_artwork.jpg";
-
-    String dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
-    String filepath = dlPath + "/" + filename;
-    String filepath2 = dlPath + "/" + artname;
-    var request = await HttpClient().getUrl(Uri.parse(kUrl));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    File file = new File(filepath);
-
-    var request2 = await HttpClient().getUrl(Uri.parse(image));
-    var response2 = await request2.close();
-    var bytes2 = await consolidateHttpClientResponseBytes(response2);
-    File file2 = new File(filepath2);
-
-    await file.writeAsBytes(bytes);
-    await file2.writeAsBytes(bytes2);
-    print("Started tag editing");
-
-    final tag = Tag(
-      title: title,
-      artist: artist,
-      artwork: filepath2,
-      album: album,
-      lyrics: lyrics,
-      genre: null,
-    );
-
-    print("Setting up Tags");
-    final tagger = new Audiotagger();
-    await tagger.writeTags(
-      path: filepath,
-      tag: tag,
-    );
-    await new Future.delayed(const Duration(seconds: 1), () {});
-    await pr.hide();
-
-    if (await file2.exists()) {
-      await file2.delete();
+    var status = await Permission.storage.status;
+    if (status.isUndetermined || status.isDenied) {
+      // code of read or write file in external storage (SD card)
+      // You can request multiple permissions at once.
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+      ].request();
+      print(statuses[Permission.storage]);
     }
-    print("Done");
+    status = await Permission.storage.status;
+    await fetchSongDetails(id);
+    if (status.isGranted) {
+      ProgressDialog pr = ProgressDialog(context);
+      pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+        showLogs: false,
+      );
+
+      pr.style(
+        backgroundColor: Color.fromARGB(255, 20, 20, 20),
+        elevation: 4,
+        textAlign: TextAlign.left,
+        progressTextStyle: TextStyle(color: Colors.white),
+        message: "Downloading " + title,
+        messageTextStyle: TextStyle(color: accent),
+        progressWidget: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(accent)),
+        ),
+      );
+      await pr.show();
+
+      final filename = title + ".m4a";
+      final artname = title + "_artwork.jpg";
+
+      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
+          ExtStorage.DIRECTORY_MUSIC);
+      String filepath = dlPath + "/" + filename;
+      String filepath2 = dlPath + "/" + artname;
+      if (has_320 == "true") {
+        kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
+        final client = http.Client();
+        final request = new http.Request('HEAD', Uri.parse(kUrl))
+          ..followRedirects = false;
+        final response = await client.send(request);
+        print(response.statusCode);
+        kUrl = (response.headers['location']);
+        print(raw_kUrl);
+        print(kUrl);
+        final request2 = new http.Request('HEAD', Uri.parse(kUrl))
+          ..followRedirects = false;
+        final response2 = await client.send(request2);
+        if (response2.statusCode != 200) {
+          kUrl = kUrl.replaceAll(".mp4", ".mp3");
+        }
+        ;
+      }
+      var request = await HttpClient().getUrl(Uri.parse(kUrl));
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      File file = new File(filepath);
+
+      var request2 = await HttpClient().getUrl(Uri.parse(image));
+      var response2 = await request2.close();
+      var bytes2 = await consolidateHttpClientResponseBytes(response2);
+      File file2 = new File(filepath2);
+
+      await file.writeAsBytes(bytes);
+      await file2.writeAsBytes(bytes2);
+      print("Started tag editing");
+
+      final tag = Tag(
+        title: title,
+        artist: artist,
+        artwork: filepath2,
+        album: album,
+        lyrics: lyrics,
+        genre: null,
+      );
+
+      print("Setting up Tags");
+      final tagger = new Audiotagger();
+      await tagger.writeTags(
+        path: filepath,
+        tag: tag,
+      );
+      await new Future.delayed(const Duration(seconds: 1), () {});
+      await pr.hide();
+
+      if (await file2.exists()) {
+        await file2.delete();
+      }
+      print("Done");
+      Fluttertoast.showToast(
+          msg: "Download Complete!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Color(0xff61e88a),
+          fontSize: 14.0);
+    } else if (status.isDenied || status.isPermanentlyDenied) {
+      Fluttertoast.showToast(
+          msg: "Storage Permission Denied!\nCan't Download Songs",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Color(0xff61e88a),
+          fontSize: 14.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Permission Error!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Color(0xff61e88a),
+          fontSize: 14.0);
+    }
   }
 
   @override
@@ -201,7 +263,8 @@ class AppState extends State<AppName> {
                               ),
                               Text(
                                 " Now Playing",
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
                               )
                             ],
                           ),
@@ -221,7 +284,11 @@ class AppState extends State<AppName> {
                     else
                       Scaffold.of(contextt).showSnackBar(new SnackBar(
                         content: new Text("Nothing is Playing."),
-                        action: SnackBarAction(label: 'Okay', textColor: accent, onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
+                        action: SnackBarAction(
+                            label: 'Okay',
+                            textColor: accent,
+                            onPressed:
+                                Scaffold.of(contextt).hideCurrentSnackBar),
                         backgroundColor: Colors.black38,
                         duration: Duration(seconds: 2),
                       ))
@@ -244,7 +311,7 @@ class AppState extends State<AppName> {
                         padding: const EdgeInsets.only(left: 42.0),
                         child: Center(
                           child: new GradientText(
-                            "MUSIFY",
+                            "Musify.",
                             shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
                             gradient: LinearGradient(colors: [
                               Color(0xff4db6ac),
@@ -265,7 +332,10 @@ class AppState extends State<AppName> {
                           icon: Icon(MdiIcons.dotsVertical),
                           color: accent,
                           onPressed: () => {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage())),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AboutPage())),
                               }),
                     )
                   ]),
@@ -320,12 +390,14 @@ class AppState extends State<AppName> {
                           padding: const EdgeInsets.only(top: 5, bottom: 5),
                           child: Card(
                             color: Colors.black12,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
                             elevation: 0,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10.0),
                               onTap: () {
-                                getSongDetails(searchedList[index]["id"], context);
+                                getSongDetails(
+                                    searchedList[index]["id"], context);
                               },
                               splashColor: accent,
                               hoverColor: accent,
@@ -344,14 +416,23 @@ class AppState extends State<AppName> {
                                       ),
                                     ),
                                     title: Text(
-                                      (searchedList[index]['title']).toString().split("(")[0].replaceAll("&quot;", "\"").replaceAll("&amp;", "&"),
+                                      (searchedList[index]['title'])
+                                          .toString()
+                                          .split("(")[0]
+                                          .replaceAll("&quot;", "\"")
+                                          .replaceAll("&amp;", "&"),
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     subtitle: Text(
-                                      searchedList[index]['more_info']["singers"],
+                                      searchedList[index]['more_info']
+                                          ["singers"],
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    trailing: IconButton(color: accent, icon: Icon(MdiIcons.downloadOutline), onPressed: () => downloadSong(searchedList[index]["id"])),
+                                    trailing: IconButton(
+                                        color: accent,
+                                        icon: Icon(MdiIcons.downloadOutline),
+                                        onPressed: () => downloadSong(
+                                            searchedList[index]["id"])),
                                   ),
                                 ],
                               ),
