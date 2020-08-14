@@ -24,7 +24,6 @@ class AboutPage extends StatelessWidget {
             Color(0xff384850),
             Color(0xff263238),
             Color(0xff263238),
-            //Color(0xff61e88a),
           ],
         ),
       ),
@@ -78,7 +77,7 @@ class AboutCards extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Musify  | 2.0.0",
-                        style: TextStyle(color: accent_light, fontSize: 24, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: accentLight, fontSize: 24, fontWeight: FontWeight.w600),
                       ),
                     )),
               ),
@@ -104,23 +103,23 @@ class AboutCards extends StatelessWidget {
                 width: 50,
                 decoration: BoxDecoration(shape: BoxShape.circle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage("https://telegram.im/img/harshv23"))),
               ),
-              title: Text('Harsh V23', style: TextStyle(color: accent_light)),
-              subtitle: Text('App Developer', style: TextStyle(color: accent_light)),
+              title: Text('Harsh V23', style: TextStyle(color: accentLight)),
+              subtitle: Text('App Developer', style: TextStyle(color: accentLight)),
               trailing: Wrap(
                 children: <Widget>[
                   IconButton(
                       icon: Icon(
                         MdiIcons.telegram,
-                        color: accent_light,
+                        color: accentLight,
                       ),
-                      tooltip: 'Contact on Twitter',
+                      tooltip: 'Contact on Telegram',
                       onPressed: () {
                         _launchURL("https://t.me/harshv23");
                       }),
                   IconButton(
                       icon: Icon(
                         MdiIcons.twitter,
-                        color: accent_light,
+                        color: accentLight,
                       ),
                       tooltip: 'Contact on Twitter',
                       onPressed: () {
@@ -145,24 +144,24 @@ class AboutCards extends StatelessWidget {
               ),
               title: Text(
                 'Sumanjay',
-                style: TextStyle(color: accent_light),
+                style: TextStyle(color: accentLight),
               ),
-              subtitle: Text('App Developer', style: TextStyle(color: accent_light)),
+              subtitle: Text('App Developer', style: TextStyle(color: accentLight)),
               trailing: Wrap(
                 children: <Widget>[
                   IconButton(
                       icon: Icon(
                         MdiIcons.telegram,
-                        color: accent_light,
+                        color: accentLight,
                       ),
-                      tooltip: 'Contact on Twitter',
+                      tooltip: 'Contact on Telegram',
                       onPressed: () {
                         _launchURL("https://t.me/cyberboysumanjay");
                       }),
                   IconButton(
                       icon: Icon(
                         MdiIcons.twitter,
-                        color: accent_light,
+                        color: accentLight,
                       ),
                       tooltip: 'Contact on Twitter',
                       onPressed: () {

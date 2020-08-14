@@ -8,7 +8,7 @@ import 'API/saavn.dart';
 
 String status = 'hidden';
 Color accent = Color(0xff61e88a);
-Color accent_light = Colors.lightGreen[50];
+Color accentLight = Colors.green[50];
 AudioPlayer audioPlayer;
 PlayerState playerState;
 
@@ -191,7 +191,7 @@ class AudioAppState extends State<AudioApp> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(album + "  |  " + artist, style: TextStyle(color: accent_light, fontSize: 15, fontWeight: FontWeight.w500)),
+                          child: Text(album + "  |  " + artist, style: TextStyle(color: accentLight, fontSize: 15, fontWeight: FontWeight.w500)),
                         ),
                       ],
                     ),
@@ -319,7 +319,7 @@ class AudioAppState extends State<AudioApp> {
                                                         lyrics,
                                                         style: new TextStyle(
                                                           fontSize: 16.0,
-                                                          color: accent_light,
+                                                          color: accentLight,
                                                         ),
                                                         textAlign: TextAlign.center,
                                                       ),
@@ -330,7 +330,7 @@ class AudioAppState extends State<AudioApp> {
                                                       child: Container(
                                                         child: Text(
                                                           "No Lyrics available ;(",
-                                                          style: TextStyle(color: accent_light, fontSize: 25),
+                                                          style: TextStyle(color: accentLight, fontSize: 25),
                                                         ),
                                                       ),
                                                     ),
