@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayer/audioplayer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
@@ -69,24 +70,28 @@ class AudioAppState extends State<AudioApp> {
     });
 
     _positionSubscription = audioPlayer.onAudioPositionChanged
-        .listen((p) => setState(() => position = p));
+        .listen((p) => {if (mounted) setState(() => position = p)});
 
     _audioPlayerStateSubscription =
         audioPlayer.onPlayerStateChanged.listen((s) {
       if (s == AudioPlayerState.PLAYING) {
-        setState(() => duration = audioPlayer.duration);
+        {
+          if (mounted) setState(() => duration = audioPlayer.duration);
+        }
       } else if (s == AudioPlayerState.STOPPED) {
         onComplete();
-        setState(() {
-          position = duration;
-        });
+        if (mounted)
+          setState(() {
+            position = duration;
+          });
       }
     }, onError: (msg) {
-      setState(() {
-        playerState = PlayerState.stopped;
-        duration = Duration(seconds: 0);
-        position = Duration(seconds: 0);
-      });
+      if (mounted)
+        setState(() {
+          playerState = PlayerState.stopped;
+          duration = Duration(seconds: 0);
+          position = Duration(seconds: 0);
+        });
     });
   }
 
@@ -94,10 +99,10 @@ class AudioAppState extends State<AudioApp> {
     await audioPlayer.play(kUrl);
     MediaNotification.showNotification(
         title: title, author: artist, artUri: image, isPlaying: true);
-
-    setState(() {
-      playerState = PlayerState.playing;
-    });
+    if (mounted)
+      setState(() {
+        playerState = PlayerState.playing;
+      });
   }
 
   Future pause() async {
@@ -111,21 +116,23 @@ class AudioAppState extends State<AudioApp> {
 
   Future stop() async {
     await audioPlayer.stop();
-    setState(() {
-      playerState = PlayerState.stopped;
-      position = Duration();
-    });
+    if (mounted)
+      setState(() {
+        playerState = PlayerState.stopped;
+        position = Duration();
+      });
   }
 
   Future mute(bool muted) async {
     await audioPlayer.mute(muted);
-    setState(() {
-      isMuted = muted;
-    });
+    if (mounted)
+      setState(() {
+        isMuted = muted;
+      });
   }
 
   void onComplete() {
-    setState(() => playerState = PlayerState.stopped);
+    if (mounted) setState(() => playerState = PlayerState.stopped);
   }
 
   @override
@@ -144,84 +151,91 @@ class AudioAppState extends State<AudioApp> {
         ),
       ),
       child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          brightness: Brightness.dark,
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            brightness: Brightness.dark,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            //backgroundColor: Color(0xff384850),
-            centerTitle: true,
-            title: GradientText(
-              "Now Playing",
-              shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
-              gradient: LinearGradient(colors: [
-                Color(0xff4db6ac),
-                Color(0xff61e88a),
-              ]),
-              style: TextStyle(
-                color: accent,
-                fontSize: 25,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 14.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  size: 28,
-                  color: accent,
-                ),
-                onPressed: () => Navigator.pop(context, false),
-              ),
+          elevation: 0,
+          //backgroundColor: Color(0xff384850),
+          centerTitle: true,
+          title: GradientText(
+            "Now Playing",
+            shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+            gradient: LinearGradient(colors: [
+              Color(0xff4db6ac),
+              Color(0xff61e88a),
+            ]),
+            style: TextStyle(
+              color: accent,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          body: Center(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                      width: 350,
-                      height: 350,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          shape: BoxShape.rectangle,
-                          image: DecorationImage(
-                              fit: BoxFit.fill, image: NetworkImage(image)))),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 35.0, bottom: 35),
-                    child: Column(
-                      children: <Widget>[
-                        GradientText(
-                          title,
-                          shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
-                          gradient: LinearGradient(colors: [
-                            Color(0xff4db6ac),
-                            Color(0xff61e88a),
-                          ]),
-                          textScaleFactor: 2.5,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w700),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(album + "  |  " + artist,
-                              style: TextStyle(
-                                  color: accentLight,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Material(child: _buildPlayer()),
-                ],
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 14.0),
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                size: 28,
+                color: accent,
               ),
+              onPressed: () => Navigator.pop(context, false),
             ),
-          )),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 350,
+                height: 350,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: CachedNetworkImageProvider(image),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 35.0, bottom: 35),
+                child: Column(
+                  children: <Widget>[
+                    GradientText(
+                      title,
+                      shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+                      gradient: LinearGradient(colors: [
+                        Color(0xff4db6ac),
+                        Color(0xff61e88a),
+                      ]),
+                      textScaleFactor: 2.5,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        album + "  |  " + artist,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: accentLight,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Material(child: _buildPlayer()),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

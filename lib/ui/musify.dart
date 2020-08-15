@@ -76,10 +76,16 @@ class AppState extends State<Musify> {
     await fetchSongDetails(id);
     checker = "Haa";
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AudioApp()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AudioApp(),
+      ),
+    );
   }
 
   downloadSong(id) async {
+    String filepath;
+    String filepath2;
     var status = await Permission.storage.status;
     if (status.isUndetermined || status.isDenied) {
       // code of read or write file in external storage (SD card)
@@ -87,7 +93,7 @@ class AppState extends State<Musify> {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.storage,
       ].request();
-      print(statuses[Permission.storage]);
+      debugPrint(statuses[Permission.storage].toString());
     }
     status = await Permission.storage.status;
     await fetchSongDetails(id);
@@ -118,21 +124,27 @@ class AppState extends State<Musify> {
 
       final filename = title + ".m4a";
       final artname = title + "_artwork.jpg";
-
+      //Directory appDocDir = await getExternalStorageDirectory();
       String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
           ExtStorage.DIRECTORY_MUSIC);
-      String filepath = dlPath + "/" + filename;
-      String filepath2 = dlPath + "/" + artname;
+      await File(dlPath + "/" + filename)
+          .create(recursive: true)
+          .then((value) => filepath = value.path);
+      await File(dlPath + "/" + artname)
+          .create(recursive: true)
+          .then((value) => filepath2 = value.path);
+      debugPrint('Audio path $filepath');
+      debugPrint('Image path $filepath2');
       if (has_320 == "true") {
         kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
         final request = http.Request('HEAD', Uri.parse(kUrl))
           ..followRedirects = false;
         final response = await client.send(request);
-        print(response.statusCode);
+        debugPrint(response.statusCode.toString());
         kUrl = (response.headers['location']);
-        print(raw_kUrl);
-        print(kUrl);
+        debugPrint(raw_kUrl);
+        debugPrint(kUrl);
         final request2 = http.Request('HEAD', Uri.parse(kUrl))
           ..followRedirects = false;
         final response2 = await client.send(request2);
@@ -152,7 +164,7 @@ class AppState extends State<Musify> {
 
       await file.writeAsBytes(bytes);
       await file2.writeAsBytes(bytes2);
-      print("Started tag editing");
+      debugPrint("Started tag editing");
 
       final tag = Tag(
         title: title,
@@ -163,7 +175,7 @@ class AppState extends State<Musify> {
         genre: null,
       );
 
-      print("Setting up Tags");
+      debugPrint("Setting up Tags");
       final tagger = Audiotagger();
       await tagger.writeTags(
         path: filepath,
@@ -175,7 +187,7 @@ class AppState extends State<Musify> {
       if (await file2.exists()) {
         await file2.delete();
       }
-      print("Done");
+      debugPrint("Done");
       Fluttertoast.showToast(
           msg: "Download Complete!",
           toastLength: Toast.LENGTH_SHORT,
