@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audioplayer/audioplayer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -63,7 +64,13 @@ class AudioAppState extends State<AudioApp> {
         play();
       }
       if (checker == "Nahi") {
-        play();
+        if (playerState == PlayerState.playing) {
+          play();
+        } else {
+          //Using (Hack) Play() here Else UI glitch is being caused, Will try to find better solution.
+          play();
+          pause();
+        }
       }
     });
 
