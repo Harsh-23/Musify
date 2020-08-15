@@ -182,54 +182,57 @@ class AudioAppState extends State<AudioApp> {
             ),
           ),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 350,
-              height: 350,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                shape: BoxShape.rectangle,
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(image),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 350,
+                height: 350,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(image),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35.0, bottom: 35),
-              child: Column(
-                children: <Widget>[
-                  GradientText(
-                    title,
-                    shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
-                    gradient: LinearGradient(colors: [
-                      Color(0xff4db6ac),
-                      Color(0xff61e88a),
-                    ]),
-                    textScaleFactor: 2.5,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      album + "  |  " + artist,
+              Padding(
+                padding: const EdgeInsets.only(top: 35.0, bottom: 35),
+                child: Column(
+                  children: <Widget>[
+                    GradientText(
+                      title,
+                      shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+                      gradient: LinearGradient(colors: [
+                        Color(0xff4db6ac),
+                        Color(0xff61e88a),
+                      ]),
+                      textScaleFactor: 2.5,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: accentLight,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        album + "  |  " + artist,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: accentLight,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Material(child: _buildPlayer()),
-          ],
+              Material(child: _buildPlayer()),
+            ],
+          ),
         ),
       ),
     );
