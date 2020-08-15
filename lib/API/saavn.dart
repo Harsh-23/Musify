@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:des_plugin/des_plugin.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 List searchedList = [];
@@ -45,7 +46,7 @@ Future fetchSongDetails(songId) async {
       .replaceAll("&#039;", "'")
       .replaceAll("&quot;", "\"");
   image = (getMain[songId]["image"]).replaceAll("150x150", "500x500");
-  print((getMain[songId]["more_info"]["artistMap"]));
+  debugPrint((getMain[songId]["more_info"]["artistMap"]).toString());
   artist = (getMain[songId]["more_info"]["artistMap"]["primary_artists"][0]
           ["name"])
       .toString()
@@ -83,5 +84,5 @@ Future fetchSongDetails(songId) async {
     ..followRedirects = false;
   final response = await client.send(request);
   kUrl = (response.headers['location']);
-  print(kUrl);
+  debugPrint(kUrl);
 }

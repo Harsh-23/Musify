@@ -93,7 +93,7 @@ class AppState extends State<Musify> {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.storage,
       ].request();
-      print(statuses[Permission.storage]);
+      debugPrint(statuses[Permission.storage].toString());
     }
     status = await Permission.storage.status;
     await fetchSongDetails(id);
@@ -133,18 +133,18 @@ class AppState extends State<Musify> {
       await File(dlPath + "/Musify/" + artname)
           .create(recursive: true)
           .then((value) => filepath2 = value.path);
-      print('Audio path $filepath');
-      print('Image path $filepath2');
+      debugPrint('Audio path $filepath');
+      debugPrint('Image path $filepath2');
       if (has_320 == "true") {
         kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
         final request = http.Request('HEAD', Uri.parse(kUrl))
           ..followRedirects = false;
         final response = await client.send(request);
-        print(response.statusCode);
+        debugPrint(response.statusCode.toString());
         kUrl = (response.headers['location']);
-        print(raw_kUrl);
-        print(kUrl);
+        debugPrint(raw_kUrl);
+        debugPrint(kUrl);
         final request2 = http.Request('HEAD', Uri.parse(kUrl))
           ..followRedirects = false;
         final response2 = await client.send(request2);
@@ -164,7 +164,7 @@ class AppState extends State<Musify> {
 
       await file.writeAsBytes(bytes);
       await file2.writeAsBytes(bytes2);
-      print("Started tag editing");
+      debugPrint("Started tag editing");
 
       final tag = Tag(
         title: title,
@@ -175,7 +175,7 @@ class AppState extends State<Musify> {
         genre: null,
       );
 
-      print("Setting up Tags");
+      debugPrint("Setting up Tags");
       final tagger = Audiotagger();
       await tagger.writeTags(
         path: filepath,
@@ -187,7 +187,7 @@ class AppState extends State<Musify> {
       if (await file2.exists()) {
         await file2.delete();
       }
-      print("Done");
+      debugPrint("Done");
       Fluttertoast.showToast(
           msg: "Download Complete!",
           toastLength: Toast.LENGTH_SHORT,
