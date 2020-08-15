@@ -69,24 +69,28 @@ class AudioAppState extends State<AudioApp> {
     });
 
     _positionSubscription = audioPlayer.onAudioPositionChanged
-        .listen((p) => setState(() => position = p));
+        .listen((p) => {if (mounted) setState(() => position = p)});
 
     _audioPlayerStateSubscription =
         audioPlayer.onPlayerStateChanged.listen((s) {
       if (s == AudioPlayerState.PLAYING) {
-        setState(() => duration = audioPlayer.duration);
+        {
+          if (mounted) setState(() => duration = audioPlayer.duration);
+        }
       } else if (s == AudioPlayerState.STOPPED) {
         onComplete();
-        setState(() {
-          position = duration;
-        });
+        if (mounted)
+          setState(() {
+            position = duration;
+          });
       }
     }, onError: (msg) {
-      setState(() {
-        playerState = PlayerState.stopped;
-        duration = Duration(seconds: 0);
-        position = Duration(seconds: 0);
-      });
+      if (mounted)
+        setState(() {
+          playerState = PlayerState.stopped;
+          duration = Duration(seconds: 0);
+          position = Duration(seconds: 0);
+        });
     });
   }
 
@@ -94,10 +98,10 @@ class AudioAppState extends State<AudioApp> {
     await audioPlayer.play(kUrl);
     MediaNotification.showNotification(
         title: title, author: artist, artUri: image, isPlaying: true);
-
-    setState(() {
-      playerState = PlayerState.playing;
-    });
+    if (mounted)
+      setState(() {
+        playerState = PlayerState.playing;
+      });
   }
 
   Future pause() async {
@@ -111,21 +115,23 @@ class AudioAppState extends State<AudioApp> {
 
   Future stop() async {
     await audioPlayer.stop();
-    setState(() {
-      playerState = PlayerState.stopped;
-      position = Duration();
-    });
+    if (mounted)
+      setState(() {
+        playerState = PlayerState.stopped;
+        position = Duration();
+      });
   }
 
   Future mute(bool muted) async {
     await audioPlayer.mute(muted);
-    setState(() {
-      isMuted = muted;
-    });
+    if (mounted)
+      setState(() {
+        isMuted = muted;
+      });
   }
 
   void onComplete() {
-    setState(() => playerState = PlayerState.stopped);
+    if (mounted) setState(() => playerState = PlayerState.stopped);
   }
 
   @override
@@ -183,13 +189,17 @@ class AudioAppState extends State<AudioApp> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                      width: 350,
-                      height: 350,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          shape: BoxShape.rectangle,
-                          image: DecorationImage(
-                              fit: BoxFit.fill, image: NetworkImage(image)))),
+                    width: 350,
+                    height: 350,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      shape: BoxShape.rectangle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(image),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 35.0, bottom: 35),
                     child: Column(
