@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:music/helper/utils.dart';
 import 'package:music/music.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-_launchURL(url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
 
 class AboutPage extends StatelessWidget {
   @override
@@ -39,7 +31,8 @@ class AboutPage extends StatelessWidget {
               Color(0xff4db6ac),
               Color(0xff61e88a),
             ]),
-            style: TextStyle(color: accent, fontSize: 25, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                color: accent, fontSize: 25, fontWeight: FontWeight.w700),
           ),
           leading: IconButton(
             icon: Icon(
@@ -77,7 +70,10 @@ class AboutCards extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Musify  | 2.0.0",
-                        style: TextStyle(color: accentLight, fontSize: 24, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: accentLight,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600),
                       ),
                     )),
               ),
@@ -95,16 +91,23 @@ class AboutCards extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
           child: Card(
             color: Color(0xff263238),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
             elevation: 2.3,
             child: ListTile(
               leading: new Container(
                 height: 50,
                 width: 50,
-                decoration: BoxDecoration(shape: BoxShape.circle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage("https://telegram.im/img/harshv23"))),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new NetworkImage(
+                            "https://telegram.im/img/harshv23"))),
               ),
               title: Text('Harsh V23', style: TextStyle(color: accentLight)),
-              subtitle: Text('App Developer', style: TextStyle(color: accentLight)),
+              subtitle:
+                  Text('App Developer', style: TextStyle(color: accentLight)),
               trailing: Wrap(
                 children: <Widget>[
                   IconButton(
@@ -114,7 +117,7 @@ class AboutCards extends StatelessWidget {
                       ),
                       tooltip: 'Contact on Telegram',
                       onPressed: () {
-                        _launchURL("https://t.me/harshv23");
+                        launchURL("https://t.me/harshv23");
                       }),
                   IconButton(
                       icon: Icon(
@@ -123,7 +126,7 @@ class AboutCards extends StatelessWidget {
                       ),
                       tooltip: 'Contact on Twitter',
                       onPressed: () {
-                        _launchURL("https://twitter.com/harshv23");
+                        launchURL("https://twitter.com/harshv23");
                       }),
                 ],
               ),
@@ -134,19 +137,26 @@ class AboutCards extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
           child: Card(
             color: Color(0xff263238),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
             elevation: 2.3,
             child: ListTile(
               leading: new Container(
                 width: 50.0,
                 height: 50,
-                decoration: BoxDecoration(shape: BoxShape.circle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage("https://telegram.im/img/cyberboysumanjay"))),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new NetworkImage(
+                            "https://telegram.im/img/cyberboysumanjay"))),
               ),
               title: Text(
                 'Sumanjay',
                 style: TextStyle(color: accentLight),
               ),
-              subtitle: Text('App Developer', style: TextStyle(color: accentLight)),
+              subtitle:
+                  Text('App Developer', style: TextStyle(color: accentLight)),
               trailing: Wrap(
                 children: <Widget>[
                   IconButton(
@@ -156,7 +166,7 @@ class AboutCards extends StatelessWidget {
                       ),
                       tooltip: 'Contact on Telegram',
                       onPressed: () {
-                        _launchURL("https://t.me/cyberboysumanjay");
+                        launchURL("https://t.me/cyberboysumanjay");
                       }),
                   IconButton(
                       icon: Icon(
@@ -165,7 +175,7 @@ class AboutCards extends StatelessWidget {
                       ),
                       tooltip: 'Contact on Twitter',
                       onPressed: () {
-                        _launchURL("https://twitter.com/cyberboysj");
+                        launchURL("https://twitter.com/cyberboysj");
                       }),
                 ],
               ),
