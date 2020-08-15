@@ -39,6 +39,7 @@ class AppName extends StatefulWidget {
 
 class AppState extends State<AppName> {
   TextEditingController searchBar = new TextEditingController();
+  bool fetchingSongs = false;
 
   void initState() {
     super.initState();
@@ -72,7 +73,11 @@ class AppState extends State<AppName> {
     });
   }
 
-  search(searchQuery) async {
+  search() async {
+    String searchQuery = searchBar.text;
+    if (searchQuery.isEmpty) return;
+//    fetchingSongs = true;
+    setState(() {});
     await fetchSongsList(searchQuery);
     setState(() {});
   }
@@ -80,7 +85,8 @@ class AppState extends State<AppName> {
   getSongDetails(String id, var context) async {
     await fetchSongDetails(id);
     checker = "Haa";
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AudioApp()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AudioApp()));
   }
 
   downloadSong(id) async {
@@ -113,7 +119,8 @@ class AppState extends State<AppName> {
         messageTextStyle: TextStyle(color: accent),
         progressWidget: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(accent)),
+          child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(accent)),
         ),
       );
       await pr.show();
@@ -121,19 +128,22 @@ class AppState extends State<AppName> {
       final filename = title + ".m4a";
       final artname = title + "_artwork.jpg";
 
-      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
+      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
+          ExtStorage.DIRECTORY_MUSIC);
       String filepath = dlPath + "/" + filename;
       String filepath2 = dlPath + "/" + artname;
       if (has_320 == "true") {
         kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
-        final request = new http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
+        final request = new http.Request('HEAD', Uri.parse(kUrl))
+          ..followRedirects = false;
         final response = await client.send(request);
         print(response.statusCode);
         kUrl = (response.headers['location']);
         print(raw_kUrl);
         print(kUrl);
-        final request2 = new http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
+        final request2 = new http.Request('HEAD', Uri.parse(kUrl))
+          ..followRedirects = false;
         final response2 = await client.send(request2);
         if (response2.statusCode != 200) {
           kUrl = kUrl.replaceAll(".mp4", ".mp3");
@@ -177,7 +187,13 @@ class AppState extends State<AppName> {
       }
       print("Done");
       Fluttertoast.showToast(
-          msg: "Download Complete!", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Color(0xff61e88a), fontSize: 14.0);
+          msg: "Download Complete!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Color(0xff61e88a),
+          fontSize: 14.0);
     } else if (status.isDenied || status.isPermanentlyDenied) {
       Fluttertoast.showToast(
           msg: "Storage Permission Denied!\nCan't Download Songs",
@@ -251,7 +267,8 @@ class AppState extends State<AppName> {
                               ),
                               Text(
                                 " Now Playing",
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
                               )
                             ],
                           ),
@@ -271,7 +288,11 @@ class AppState extends State<AppName> {
                     else
                       Scaffold.of(contextt).showSnackBar(new SnackBar(
                         content: new Text("Nothing is Playing."),
-                        action: SnackBarAction(label: 'Okay', textColor: accent, onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
+                        action: SnackBarAction(
+                            label: 'Okay',
+                            textColor: accent,
+                            onPressed:
+                                Scaffold.of(contextt).hideCurrentSnackBar),
                         backgroundColor: Colors.black38,
                         duration: Duration(seconds: 2),
                       ))
@@ -315,7 +336,10 @@ class AppState extends State<AppName> {
                           icon: Icon(MdiIcons.dotsVertical),
                           color: accent,
                           onPressed: () => {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage())),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AboutPage())),
                               }),
                     )
                   ]),
@@ -323,7 +347,7 @@ class AppState extends State<AppName> {
                 new Padding(padding: EdgeInsets.only(top: 20)),
                 new TextField(
                   onSubmitted: (String value) {
-                    search(value);
+                    search();
                   },
                   controller: searchBar,
                   style: TextStyle(
@@ -344,9 +368,15 @@ class AppState extends State<AppName> {
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                       borderSide: BorderSide(color: accent),
                     ),
-                    suffixIcon: Icon(
-                      Icons.search,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: accent,
+                      ),
                       color: accent,
+                      onPressed: () {
+                        search();
+                      },
                     ),
                     border: InputBorder.none,
                     hintText: "Search...",
@@ -370,12 +400,14 @@ class AppState extends State<AppName> {
                           padding: const EdgeInsets.only(top: 5, bottom: 5),
                           child: Card(
                             color: Colors.black12,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
                             elevation: 0,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10.0),
                               onTap: () {
-                                getSongDetails(searchedList[index]["id"], context);
+                                getSongDetails(
+                                    searchedList[index]["id"], context);
                               },
                               splashColor: accent,
                               hoverColor: accent,
@@ -393,14 +425,23 @@ class AppState extends State<AppName> {
                                       ),
                                     ),
                                     title: Text(
-                                      (searchedList[index]['title']).toString().split("(")[0].replaceAll("&quot;", "\"").replaceAll("&amp;", "&"),
+                                      (searchedList[index]['title'])
+                                          .toString()
+                                          .split("(")[0]
+                                          .replaceAll("&quot;", "\"")
+                                          .replaceAll("&amp;", "&"),
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     subtitle: Text(
-                                      searchedList[index]['more_info']["singers"],
+                                      searchedList[index]['more_info']
+                                          ["singers"],
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    trailing: IconButton(color: accent, icon: Icon(MdiIcons.downloadOutline), onPressed: () => downloadSong(searchedList[index]["id"])),
+                                    trailing: IconButton(
+                                        color: accent,
+                                        icon: Icon(MdiIcons.downloadOutline),
+                                        onPressed: () => downloadSong(
+                                            searchedList[index]["id"])),
                                   ),
                                 ],
                               ),
