@@ -150,88 +150,84 @@ class AudioAppState extends State<AudioApp> {
         ),
       ),
       child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          brightness: Brightness.dark,
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            brightness: Brightness.dark,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            //backgroundColor: Color(0xff384850),
-            centerTitle: true,
-            title: GradientText(
-              "Now Playing",
-              shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
-              gradient: LinearGradient(colors: [
-                Color(0xff4db6ac),
-                Color(0xff61e88a),
-              ]),
-              style: TextStyle(
-                color: accent,
-                fontSize: 25,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 14.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  size: 28,
-                  color: accent,
-                ),
-                onPressed: () => Navigator.pop(context, false),
-              ),
+          elevation: 0,
+          //backgroundColor: Color(0xff384850),
+          centerTitle: true,
+          title: GradientText(
+            "Now Playing",
+            shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+            gradient: LinearGradient(colors: [
+              Color(0xff4db6ac),
+              Color(0xff61e88a),
+            ]),
+            style: TextStyle(
+              color: accent,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          body: Center(
-            child: Center(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 14.0),
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                size: 28,
+                color: accent,
+              ),
+              onPressed: () => Navigator.pop(context, false),
+            ),
+          ),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(image),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 35.0, bottom: 35),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 350,
-                    height: 350,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      shape: BoxShape.rectangle,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(image),
-                      ),
-                    ),
+                children: <Widget>[
+                  GradientText(
+                    title,
+                    shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+                    gradient: LinearGradient(colors: [
+                      Color(0xff4db6ac),
+                      Color(0xff61e88a),
+                    ]),
+                    textScaleFactor: 2.5,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 35.0, bottom: 35),
-                    child: Column(
-                      children: <Widget>[
-                        GradientText(
-                          title,
-                          shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
-                          gradient: LinearGradient(colors: [
-                            Color(0xff4db6ac),
-                            Color(0xff61e88a),
-                          ]),
-                          textScaleFactor: 2.5,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w700),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(album + "  |  " + artist,
-                              style: TextStyle(
-                                  color: accentLight,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                      ],
-                    ),
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(album + "  |  " + artist,
+                        style: TextStyle(
+                            color: accentLight,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500)),
                   ),
-                  Material(child: _buildPlayer()),
                 ],
               ),
             ),
-          )),
+            Material(child: _buildPlayer()),
+          ],
+        ),
+      ),
     );
   }
 
