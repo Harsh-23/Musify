@@ -80,6 +80,8 @@ class AppState extends State<Musify> {
   }
 
   downloadSong(id) async {
+    String filepath;
+    String filepath2;
     var status = await Permission.storage.status;
     if (status.isUndetermined || status.isDenied) {
       // code of read or write file in external storage (SD card)
@@ -118,11 +120,17 @@ class AppState extends State<Musify> {
 
       final filename = title + ".m4a";
       final artname = title + "_artwork.jpg";
-
+      //Directory appDocDir = await getExternalStorageDirectory();
       String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
           ExtStorage.DIRECTORY_MUSIC);
-      String filepath = dlPath + "/" + filename;
-      String filepath2 = dlPath + "/" + artname;
+      await File(dlPath + "/Musify/" + filename)
+          .create(recursive: true)
+          .then((value) => filepath = value.path);
+      await File(dlPath + "/Musify/" + artname)
+          .create(recursive: true)
+          .then((value) => filepath2 = value.path);
+      print('Audio path $filepath');
+      print('Image path $filepath2');
       if (has_320 == "true") {
         kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
