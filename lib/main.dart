@@ -1,22 +1,24 @@
-import 'dart:ui';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'dart:ui';
+
 import 'package:audiotagger/audiotagger.dart';
 import 'package:audiotagger/models/tag.dart';
+import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:music/API/saavn.dart';
-import 'package:music/about.dart';
-import 'package:ext_storage/ext_storage.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'API/saavn.dart';
-import 'package:http/http.dart' as http;
-import 'music.dart';
-import 'package:gradient_widgets/gradient_widgets.dart';
-import 'package:flutter/services.dart';
+import 'package:music/ui/about.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
+import 'API/saavn.dart';
+import 'music.dart';
 
 main() async {
   runApp(MaterialApp(
