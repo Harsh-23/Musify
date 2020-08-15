@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayer/audioplayer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
@@ -195,7 +196,7 @@ class AudioAppState extends State<AudioApp> {
                   shape: BoxShape.rectangle,
                   image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage(image),
+                    image: CachedNetworkImageProvider(image),
                   ),
                 ),
               ),
