@@ -37,12 +37,12 @@ main() async {
 class AppName extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new AppState();
+    return AppState();
   }
 }
 
 class AppState extends State<AppName> {
-  TextEditingController searchBar = new TextEditingController();
+  TextEditingController searchBar = TextEditingController();
   bool fetchingSongs = false;
 
   void initState() {
@@ -125,7 +125,7 @@ class AppState extends State<AppName> {
         progressWidget: Padding(
           padding: const EdgeInsets.all(20.0),
           child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(accent),
+            valueColor: AlwaysStoppedAnimation<Color>(accent),
           ),
         ),
       );
@@ -141,14 +141,14 @@ class AppState extends State<AppName> {
       if (has_320 == "true") {
         kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
-        final request = new http.Request('HEAD', Uri.parse(kUrl))
+        final request = http.Request('HEAD', Uri.parse(kUrl))
           ..followRedirects = false;
         final response = await client.send(request);
         print(response.statusCode);
         kUrl = (response.headers['location']);
         print(raw_kUrl);
         print(kUrl);
-        final request2 = new http.Request('HEAD', Uri.parse(kUrl))
+        final request2 = http.Request('HEAD', Uri.parse(kUrl))
           ..followRedirects = false;
         final response2 = await client.send(request2);
         if (response2.statusCode != 200) {
@@ -158,12 +158,12 @@ class AppState extends State<AppName> {
       var request = await HttpClient().getUrl(Uri.parse(kUrl));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
-      File file = new File(filepath);
+      File file = File(filepath);
 
       var request2 = await HttpClient().getUrl(Uri.parse(image));
       var response2 = await request2.close();
       var bytes2 = await consolidateHttpClientResponseBytes(response2);
-      File file2 = new File(filepath2);
+      File file2 = File(filepath2);
 
       await file.writeAsBytes(bytes);
       await file2.writeAsBytes(bytes2);
@@ -179,12 +179,12 @@ class AppState extends State<AppName> {
       );
 
       print("Setting up Tags");
-      final tagger = new Audiotagger();
+      final tagger = Audiotagger();
       await tagger.writeTags(
         path: filepath,
         tag: tag,
       );
-      await new Future.delayed(const Duration(seconds: 1), () {});
+      await Future.delayed(const Duration(seconds: 1), () {});
       await pr.hide();
 
       if (await file2.exists()) {
@@ -234,7 +234,7 @@ class AppState extends State<AppName> {
           ],
         ),
       ),
-      child: new Scaffold(
+      child: Scaffold(
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.transparent,
         //backgroundColor: Color(0xff384850),
@@ -296,8 +296,8 @@ class AppState extends State<AppName> {
                     }
                   else
                     Scaffold.of(contextt).showSnackBar(
-                      new SnackBar(
-                        content: new Text("Nothing is Playing."),
+                      SnackBar(
+                        content: Text("Nothing is Playing."),
                         action: SnackBarAction(
                             label: 'Okay',
                             textColor: accent,
@@ -313,19 +313,19 @@ class AppState extends State<AppName> {
             );
           }),
         ),
-        body: new SingleChildScrollView(
+        body: SingleChildScrollView(
           padding: EdgeInsets.all(12.0),
-          child: new Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              new Padding(padding: EdgeInsets.only(top: 30, bottom: 20.0)),
+              Padding(padding: EdgeInsets.only(top: 30, bottom: 20.0)),
               Center(
                 child: Row(children: <Widget>[
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 42.0),
                       child: Center(
-                        child: new GradientText(
+                        child: GradientText(
                           "Musify.",
                           shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
                           gradient: LinearGradient(colors: [
@@ -357,8 +357,8 @@ class AppState extends State<AppName> {
                   )
                 ]),
               ),
-              new Padding(padding: EdgeInsets.only(top: 20)),
-              new TextField(
+              Padding(padding: EdgeInsets.only(top: 20)),
+              TextField(
                 onSubmitted: (String value) {
                   search();
                 },
@@ -393,7 +393,7 @@ class AppState extends State<AppName> {
                             child: Center(
                               child: CircularProgressIndicator(
                                 valueColor:
-                                    new AlwaysStoppedAnimation<Color>(accent),
+                                    AlwaysStoppedAnimation<Color>(accent),
                               ),
                             ),
                           )
@@ -420,11 +420,11 @@ class AppState extends State<AppName> {
                 ),
               ),
               if (searchedList.isNotEmpty)
-                new ListView.builder(
+                ListView.builder(
                   shrinkWrap: true,
                   itemCount: searchedList.length,
                   itemBuilder: (BuildContext ctxt, int index) {
-                    return new Padding(
+                    return Padding(
                       padding: const EdgeInsets.only(top: 5, bottom: 5),
                       child: Card(
                         color: Colors.black12,

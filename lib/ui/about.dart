@@ -98,15 +98,14 @@ class AboutCards extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0)),
               elevation: 2.3,
               child: ListTile(
-                leading: new Container(
+                leading: Container(
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    image: new DecorationImage(
+                    image: DecorationImage(
                       fit: BoxFit.fill,
-                      image:
-                          new NetworkImage("https://telegram.im/img/harshv23"),
+                      image: NetworkImage("https://telegram.im/img/harshv23"),
                     ),
                   ),
                 ),
@@ -155,14 +154,14 @@ class AboutCards extends StatelessWidget {
               ),
               elevation: 2.3,
               child: ListTile(
-                leading: new Container(
+                leading: Container(
                   width: 50.0,
                   height: 50,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    image: new DecorationImage(
+                    image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: new NetworkImage(
+                      image: NetworkImage(
                           "https://telegram.im/img/cyberboysumanjay"),
                     ),
                   ),
