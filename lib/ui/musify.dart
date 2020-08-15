@@ -76,7 +76,11 @@ class AppState extends State<Musify> {
     await fetchSongDetails(id);
     checker = "Haa";
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AudioApp()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AudioApp(),
+      ),
+    );
   }
 
   downloadSong(id) async {
