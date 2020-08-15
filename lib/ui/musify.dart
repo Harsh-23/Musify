@@ -127,10 +127,10 @@ class AppState extends State<Musify> {
       //Directory appDocDir = await getExternalStorageDirectory();
       String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
           ExtStorage.DIRECTORY_MUSIC);
-      await File(dlPath + "/Musify/" + filename)
+      await File(dlPath + "/" + filename)
           .create(recursive: true)
           .then((value) => filepath = value.path);
-      await File(dlPath + "/Musify/" + artname)
+      await File(dlPath + "/" + artname)
           .create(recursive: true)
           .then((value) => filepath2 = value.path);
       debugPrint('Audio path $filepath');
