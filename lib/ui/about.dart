@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:music/helper/utils.dart';
-import 'package:music/music.dart';
+import 'package:music/style/appColors.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -32,7 +32,10 @@ class AboutPage extends StatelessWidget {
               Color(0xff61e88a),
             ]),
             style: TextStyle(
-                color: accent, fontSize: 25, fontWeight: FontWeight.w700),
+              color: accent,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           leading: IconButton(
             icon: Icon(

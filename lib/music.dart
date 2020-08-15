@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:music/style/appColors.dart';
 
 import 'API/saavn.dart';
 
 String status = 'hidden';
-Color accent = Color(0xff61e88a);
-Color accentLight = Colors.green[50];
 AudioPlayer audioPlayer;
 PlayerState playerState;
 
@@ -29,6 +28,7 @@ class AudioAppState extends State<AudioApp> {
   Duration position;
 
   get isPlaying => playerState == PlayerState.playing;
+
   get isPaused => playerState == PlayerState.paused;
 
   get durationText =>
@@ -159,7 +159,10 @@ class AudioAppState extends State<AudioApp> {
                 Color(0xff61e88a),
               ]),
               style: TextStyle(
-                  color: accent, fontSize: 25, fontWeight: FontWeight.w700),
+                color: accent,
+                fontSize: 25,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             leading: Padding(
               padding: const EdgeInsets.only(left: 14.0),

@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:music/API/saavn.dart';
 import 'package:music/music.dart';
+import 'package:music/style/appColors.dart';
 import 'package:music/ui/about.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
