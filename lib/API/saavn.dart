@@ -71,7 +71,17 @@ Future fetchSongDetails(songId) async {
 
     lyrics = fetchedLyrics["lyrics"].toString().replaceAll("<br>", "\n");
   } else {
-    lyrics = "null";
+    String lyricsApiUrl =
+        "https://sumanjay.vercel.app/lyrics/" + artist + "/" + title;
+    var lyricsApiRes =
+        await http.get(lyricsApiUrl, headers: {"Accept": "application/json"});
+
+    var lyricsResponse = json.decode(lyricsApiRes.body);
+    if (lyricsResponse['status'] && lyricsResponse['lyrics'] != null) {
+      lyrics = lyricsResponse['lyrics'];
+    } else {
+      lyrics = 'null';
+    }
   }
   has_320 = getMain[songId]["more_info"]["320kbps"];
   kUrl = await DesPlugin.decrypt(
