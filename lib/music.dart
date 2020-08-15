@@ -215,11 +215,15 @@ class AudioAppState extends State<AudioApp> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(album + "  |  " + artist,
-                        style: TextStyle(
-                            color: accentLight,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500)),
+                    child: Text(
+                      album + "  |  " + artist,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: accentLight,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ],
               ),
