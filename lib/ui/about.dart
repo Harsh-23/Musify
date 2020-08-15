@@ -54,18 +54,19 @@ class AboutCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-        child: Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 6),
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                title: Image.network(
-                  "https://telegra.ph/file/4798f3a9303b8300e4b5b.png",
-                  height: 120,
-                ),
-                subtitle: Padding(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 6),
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Image.network(
+                    "https://telegra.ph/file/4798f3a9303b8300e4b5b.png",
+                    height: 120,
+                  ),
+                  subtitle: Padding(
                     padding: const EdgeInsets.all(13.0),
                     child: Center(
                       child: Text(
@@ -75,42 +76,51 @@ class AboutCards extends StatelessWidget {
                             fontSize: 24,
                             fontWeight: FontWeight.w600),
                       ),
-                    )),
-              ),
-            ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
-          child: Divider(
-            color: Colors.white24,
-            thickness: 0.8,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
+            child: Divider(
+              color: Colors.white24,
+              thickness: 0.8,
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
-          child: Card(
-            color: Color(0xff263238),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            elevation: 2.3,
-            child: ListTile(
-              leading: new Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            child: Card(
+              color: Color(0xff263238),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              elevation: 2.3,
+              child: ListTile(
+                leading: new Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage(
-                            "https://telegram.im/img/harshv23"))),
-              ),
-              title: Text('Harsh V23', style: TextStyle(color: accentLight)),
-              subtitle:
-                  Text('App Developer', style: TextStyle(color: accentLight)),
-              trailing: Wrap(
-                children: <Widget>[
-                  IconButton(
+                      fit: BoxFit.fill,
+                      image:
+                          new NetworkImage("https://telegram.im/img/harshv23"),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Harsh V23',
+                  style: TextStyle(color: accentLight),
+                ),
+                subtitle: Text(
+                  'App Developer',
+                  style: TextStyle(color: accentLight),
+                ),
+                trailing: Wrap(
+                  children: <Widget>[
+                    IconButton(
                       icon: Icon(
                         MdiIcons.telegram,
                         color: accentLight,
@@ -118,8 +128,9 @@ class AboutCards extends StatelessWidget {
                       tooltip: 'Contact on Telegram',
                       onPressed: () {
                         launchURL("https://t.me/harshv23");
-                      }),
-                  IconButton(
+                      },
+                    ),
+                    IconButton(
                       icon: Icon(
                         MdiIcons.twitter,
                         color: accentLight,
@@ -127,39 +138,46 @@ class AboutCards extends StatelessWidget {
                       tooltip: 'Contact on Twitter',
                       onPressed: () {
                         launchURL("https://twitter.com/harshv23");
-                      }),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
-          child: Card(
-            color: Color(0xff263238),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            elevation: 2.3,
-            child: ListTile(
-              leading: new Container(
-                width: 50.0,
-                height: 50,
-                decoration: BoxDecoration(
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            child: Card(
+              color: Color(0xff263238),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 2.3,
+              child: ListTile(
+                leading: new Container(
+                  width: 50.0,
+                  height: 50,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage(
-                            "https://telegram.im/img/cyberboysumanjay"))),
-              ),
-              title: Text(
-                'Sumanjay',
-                style: TextStyle(color: accentLight),
-              ),
-              subtitle:
-                  Text('App Developer', style: TextStyle(color: accentLight)),
-              trailing: Wrap(
-                children: <Widget>[
-                  IconButton(
+                      fit: BoxFit.fill,
+                      image: new NetworkImage(
+                          "https://telegram.im/img/cyberboysumanjay"),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Sumanjay',
+                  style: TextStyle(color: accentLight),
+                ),
+                subtitle: Text(
+                  'App Developer',
+                  style: TextStyle(color: accentLight),
+                ),
+                trailing: Wrap(
+                  children: <Widget>[
+                    IconButton(
                       icon: Icon(
                         MdiIcons.telegram,
                         color: accentLight,
@@ -167,8 +185,9 @@ class AboutCards extends StatelessWidget {
                       tooltip: 'Contact on Telegram',
                       onPressed: () {
                         launchURL("https://t.me/cyberboysumanjay");
-                      }),
-                  IconButton(
+                      },
+                    ),
+                    IconButton(
                       icon: Icon(
                         MdiIcons.twitter,
                         color: accentLight,
@@ -176,13 +195,15 @@ class AboutCards extends StatelessWidget {
                       tooltip: 'Contact on Twitter',
                       onPressed: () {
                         launchURL("https://twitter.com/cyberboysj");
-                      }),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }
