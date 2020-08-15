@@ -42,6 +42,7 @@ Future fetchSongDetails(songId) async {
       .toString()
       .split("(")[0]
       .replaceAll("&amp;", "&")
+      .replaceAll("&#039;", "'")
       .replaceAll("&quot;", "\"");
   image = (getMain[songId]["image"]).replaceAll("150x150", "500x500");
   print((getMain[songId]["more_info"]["artistMap"]));
@@ -49,10 +50,12 @@ Future fetchSongDetails(songId) async {
           ["name"])
       .toString()
       .replaceAll("&quot;", "\"")
+      .replaceAll("&#039;", "'")
       .replaceAll("&amp;", "&");
   album = (getMain[songId]["more_info"]["album"])
       .toString()
       .replaceAll("&quot;", "\"")
+      .replaceAll("&#039;", "'")
       .replaceAll("&amp;", "&");
 
   if (getMain[songId]["more_info"]["has_lyrics"] == "true") {
