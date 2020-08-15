@@ -22,6 +22,19 @@
 
 ---
 
+  <h3 align="center">Screenshots</h3>
+  
+  Homepage             |  Now Playing
+:-------------------------:|:-------------------------:
+![](https://telegra.ph/file/902d4e7951a58ffd3d31c.png)  |  ![](https://telegra.ph/file/912e91bc24753c3d8fc46.png)
+
+
+  Lyrics             |  About
+:-------------------------:|:-------------------------:
+![](https://telegra.ph/file/5182d60b3483c5abb60d9.png)  |  ![](https://telegra.ph/file/f54155f803bbfe9271321.png)
+
+---
+
   <h3 align="center">Download</h3>
   <p align="center" ><a href="https://github.com/Harsh-23/Musify/releases" rel="GitHub Releases"><img width="100" height="100" src="https://telegra.ph/file/21bb2cc648561f192cea4.png"></a></p>
 
