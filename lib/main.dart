@@ -76,9 +76,10 @@ class AppState extends State<AppName> {
   search() async {
     String searchQuery = searchBar.text;
     if (searchQuery.isEmpty) return;
-//    fetchingSongs = true;
+    fetchingSongs = true;
     setState(() {});
     await fetchSongsList(searchQuery);
+    fetchingSongs = false;
     setState(() {});
   }
 
@@ -369,10 +370,21 @@ class AppState extends State<AppName> {
                       borderSide: BorderSide(color: accent),
                     ),
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: accent,
-                      ),
+                      icon: fetchingSongs
+                          ? SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            accent)),
+                              ),
+                            )
+                          : Icon(
+                              Icons.search,
+                              color: accent,
+                            ),
                       color: accent,
                       onPressed: () {
                         search();
