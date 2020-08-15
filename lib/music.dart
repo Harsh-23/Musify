@@ -32,11 +32,9 @@ class AudioAppState extends State<AudioApp> {
 
   get isPaused => playerState == PlayerState.paused;
 
-  get durationText =>
-      duration != null ? duration.toString().split('.').first : '';
+  get durationText => duration != null ? duration.toString().split('.').first : '';
 
-  get positionText =>
-      position != null ? position.toString().split('.').first : '';
+  get positionText => position != null ? position.toString().split('.').first : '';
 
   bool isMuted = false;
 
@@ -69,11 +67,9 @@ class AudioAppState extends State<AudioApp> {
       }
     });
 
-    _positionSubscription = audioPlayer.onAudioPositionChanged
-        .listen((p) => {if (mounted) setState(() => position = p)});
+    _positionSubscription = audioPlayer.onAudioPositionChanged.listen((p) => {if (mounted) setState(() => position = p)});
 
-    _audioPlayerStateSubscription =
-        audioPlayer.onPlayerStateChanged.listen((s) {
+    _audioPlayerStateSubscription = audioPlayer.onPlayerStateChanged.listen((s) {
       if (s == AudioPlayerState.PLAYING) {
         {
           if (mounted) setState(() => duration = audioPlayer.duration);
@@ -97,8 +93,7 @@ class AudioAppState extends State<AudioApp> {
 
   Future play() async {
     await audioPlayer.play(kUrl);
-    MediaNotification.showNotification(
-        title: title, author: artist, artUri: image, isPlaying: true);
+    MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: true);
     if (mounted)
       setState(() {
         playerState = PlayerState.playing;
@@ -107,8 +102,7 @@ class AudioAppState extends State<AudioApp> {
 
   Future pause() async {
     await audioPlayer.pause();
-    MediaNotification.showNotification(
-        title: title, author: artist, artUri: image, isPlaying: false);
+    MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: false);
     setState(() {
       playerState = PlayerState.paused;
     });
@@ -184,55 +178,57 @@ class AudioAppState extends State<AudioApp> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 350,
-                height: 350,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: CachedNetworkImageProvider(image),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 35.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 350,
+                  height: 350,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: CachedNetworkImageProvider(image),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 35.0, bottom: 35),
-                child: Column(
-                  children: <Widget>[
-                    GradientText(
-                      title,
-                      shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
-                      gradient: LinearGradient(colors: [
-                        Color(0xff4db6ac),
-                        Color(0xff61e88a),
-                      ]),
-                      textScaleFactor: 2.5,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        album + "  |  " + artist,
+                Padding(
+                  padding: const EdgeInsets.only(top: 35.0, bottom: 35),
+                  child: Column(
+                    children: <Widget>[
+                      GradientText(
+                        title,
+                        shaderRect: Rect.fromLTWH(13.0, 0.0, 100.0, 50.0),
+                        gradient: LinearGradient(colors: [
+                          Color(0xff4db6ac),
+                          Color(0xff61e88a),
+                        ]),
+                        textScaleFactor: 2.5,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: accentLight,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          album + "  |  " + artist,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: accentLight,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Material(child: _buildPlayer()),
-            ],
+                Material(child: _buildPlayer()),
+              ],
+            ),
           ),
         ),
       ),
@@ -311,87 +307,76 @@ class AudioAppState extends State<AudioApp> {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: Builder(builder: (context) {
                       return FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
                           color: Colors.black12,
                           onPressed: () {
                             showBottomSheet(
                                 context: context,
                                 builder: (context) => Container(
-                                      decoration: BoxDecoration(
-                                          color: Color(0xff212c31),
-                                          borderRadius: BorderRadius.only(
-                                              topLeft:
-                                                  const Radius.circular(18.0),
-                                              topRight:
-                                                  const Radius.circular(18.0))),
+                                      decoration: BoxDecoration(color: Color(0xff212c31), borderRadius: BorderRadius.only(topLeft: const Radius.circular(18.0), topRight: const Radius.circular(18.0))),
                                       height: 400,
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  IconButton(
-                                                      icon: Icon(
-                                                        Icons.arrow_back_ios,
-                                                        color: accent,
-                                                        size: 20,
-                                                      ),
-                                                      onPressed: () => {
-                                                            Navigator.pop(
-                                                                context)
-                                                          }),
-                                                  Text(
-                                                    "Lyrics",
-                                                    style: TextStyle(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Row(
+                                              children: <Widget>[
+                                                IconButton(
+                                                    icon: Icon(
+                                                      Icons.arrow_back_ios,
                                                       color: accent,
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      size: 20,
+                                                    ),
+                                                    onPressed: () => {Navigator.pop(context)}),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(right: 42.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Lyrics",
+                                                        style: TextStyle(
+                                                          color: accent,
+                                                          fontSize: 30,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                            lyrics != "null"
-                                                ? Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            6.0),
+                                          ),
+                                          lyrics != "null"
+                                              ? Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                      padding: const EdgeInsets.all(6.0),
+                                                      child: Center(
+                                                        child: SingleChildScrollView(
+                                                          child: Text(
+                                                            lyrics,
+                                                            style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              color: accentLight,
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),
+                                                      )),
+                                                )
+                                              : Padding(
+                                                  padding: const EdgeInsets.only(top: 120.0),
+                                                  child: Center(
                                                     child: Container(
                                                       child: Text(
-                                                        lyrics,
-                                                        style: TextStyle(
-                                                          fontSize: 16.0,
-                                                          color: accentLight,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ))
-                                                : Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 120.0),
-                                                    child: Center(
-                                                      child: Container(
-                                                        child: Text(
-                                                          "No Lyrics available ;(",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  accentLight,
-                                                              fontSize: 25),
-                                                        ),
+                                                        "No Lyrics available ;(",
+                                                        style: TextStyle(color: accentLight, fontSize: 25),
                                                       ),
                                                     ),
                                                   ),
-                                          ],
-                                        ),
+                                                ),
+                                        ],
                                       ),
                                     ));
                           },
@@ -410,16 +395,12 @@ class AudioAppState extends State<AudioApp> {
 
   Row _buildProgressView() => Row(mainAxisSize: MainAxisSize.min, children: [
         Text(
-          position != null
-              ? "${positionText ?? ''} ".replaceFirst("0:0", "0")
-              : duration != null ? durationText : '',
+          position != null ? "${positionText ?? ''} ".replaceFirst("0:0", "0") : duration != null ? durationText : '',
           style: TextStyle(fontSize: 18.0, color: Colors.green[50]),
         ),
         Spacer(),
         Text(
-          position != null
-              ? "${durationText ?? ''}".replaceAll("0:", "")
-              : duration != null ? durationText : '',
+          position != null ? "${durationText ?? ''}".replaceAll("0:", "") : duration != null ? durationText : '',
           style: TextStyle(fontSize: 18.0, color: Colors.green[50]),
         )
       ]);

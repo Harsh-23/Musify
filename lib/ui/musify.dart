@@ -35,8 +35,7 @@ class AppState extends State<Musify> {
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Color(0xff263238),
-      // navigation bar color
-      statusBarColor: Colors.transparent, // status bar color
+      statusBarColor: Colors.transparent,
     ));
 
     MediaNotification.setListener('play', () {
@@ -125,28 +124,21 @@ class AppState extends State<Musify> {
       final filename = title + ".m4a";
       final artname = title + "_artwork.jpg";
       //Directory appDocDir = await getExternalStorageDirectory();
-      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
-          ExtStorage.DIRECTORY_MUSIC);
-      await File(dlPath + "/" + filename)
-          .create(recursive: true)
-          .then((value) => filepath = value.path);
-      await File(dlPath + "/" + artname)
-          .create(recursive: true)
-          .then((value) => filepath2 = value.path);
+      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
+      await File(dlPath + "/" + filename).create(recursive: true).then((value) => filepath = value.path);
+      await File(dlPath + "/" + artname).create(recursive: true).then((value) => filepath2 = value.path);
       debugPrint('Audio path $filepath');
       debugPrint('Image path $filepath2');
       if (has_320 == "true") {
-        kUrl = raw_kUrl.replaceAll("_96.mp4", "_320.mp4");
+        kUrl = rawkUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
-        final request = http.Request('HEAD', Uri.parse(kUrl))
-          ..followRedirects = false;
+        final request = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
         final response = await client.send(request);
         debugPrint(response.statusCode.toString());
         kUrl = (response.headers['location']);
-        debugPrint(raw_kUrl);
+        debugPrint(rawkUrl);
         debugPrint(kUrl);
-        final request2 = http.Request('HEAD', Uri.parse(kUrl))
-          ..followRedirects = false;
+        final request2 = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
         final response2 = await client.send(request2);
         if (response2.statusCode != 200) {
           kUrl = kUrl.replaceAll(".mp4", ".mp3");
@@ -189,13 +181,7 @@ class AppState extends State<Musify> {
       }
       debugPrint("Done");
       Fluttertoast.showToast(
-          msg: "Download Complete!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Color(0xff61e88a),
-          fontSize: 14.0);
+          msg: "Download Complete!", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Color(0xff61e88a), fontSize: 14.0);
     } else if (status.isDenied || status.isPermanentlyDenied) {
       Fluttertoast.showToast(
           msg: "Storage Permission Denied!\nCan't Download Songs",
@@ -295,17 +281,13 @@ class AppState extends State<Musify> {
                     Scaffold.of(contextt).showSnackBar(
                       SnackBar(
                         content: Text("Nothing is Playing."),
-                        action: SnackBarAction(
-                            label: 'Okay',
-                            textColor: accent,
-                            onPressed:
-                                Scaffold.of(contextt).hideCurrentSnackBar),
+                        action: SnackBarAction(label: 'Okay', textColor: accent, onPressed: Scaffold.of(contextt).hideCurrentSnackBar),
                         backgroundColor: Colors.black38,
                         duration: Duration(seconds: 2),
                       ),
                     )
                 },
-                tooltip: 'Increment',
+                tooltip: 'Now Playing',
               ),
             );
           }),
@@ -389,8 +371,7 @@ class AppState extends State<Musify> {
                             width: 18,
                             child: Center(
                               child: CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(accent),
+                                valueColor: AlwaysStoppedAnimation<Color>(accent),
                               ),
                             ),
                           )
@@ -451,11 +432,7 @@ class AppState extends State<Musify> {
                                   ),
                                 ),
                                 title: Text(
-                                  (searchedList[index]['title'])
-                                      .toString()
-                                      .split("(")[0]
-                                      .replaceAll("&quot;", "\"")
-                                      .replaceAll("&amp;", "&"),
+                                  (searchedList[index]['title']).toString().split("(")[0].replaceAll("&quot;", "\"").replaceAll("&amp;", "&"),
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 subtitle: Text(
@@ -465,8 +442,7 @@ class AppState extends State<Musify> {
                                 trailing: IconButton(
                                   color: accent,
                                   icon: Icon(MdiIcons.downloadOutline),
-                                  onPressed: () =>
-                                      downloadSong(searchedList[index]["id"]),
+                                  onPressed: () => downloadSong(searchedList[index]["id"]),
                                 ),
                               ),
                             ],

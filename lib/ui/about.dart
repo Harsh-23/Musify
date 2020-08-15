@@ -60,8 +60,7 @@ class AboutCards extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Padding(
-            padding:
-                const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 6),
+            padding: const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 6),
             child: Column(
               children: <Widget>[
                 ListTile(
@@ -74,10 +73,7 @@ class AboutCards extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Musify  | 2.0.0",
-                        style: TextStyle(
-                            color: accentLight,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(color: accentLight, fontSize: 24, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -93,12 +89,10 @@ class AboutCards extends StatelessWidget {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
             child: Card(
               color: Color(0xff263238),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               elevation: 2.3,
               child: ListTile(
                 leading: Container(
@@ -148,8 +142,7 @@ class AboutCards extends StatelessWidget {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
             child: Card(
               color: Color(0xff263238),
               shape: RoundedRectangleBorder(
@@ -164,8 +157,7 @@ class AboutCards extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage(
-                          "https://telegram.im/img/cyberboysumanjay"),
+                      image: NetworkImage("https://telegram.im/img/cyberboysumanjay"),
                     ),
                   ),
                 ),
