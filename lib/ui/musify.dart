@@ -407,6 +407,7 @@ class AppState extends State<Musify> {
               if (searchedList.isNotEmpty)
                 ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: searchedList.length,
                   itemBuilder: (BuildContext ctxt, int index) {
                     return Padding(
