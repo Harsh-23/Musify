@@ -42,7 +42,7 @@ Future fetchSongDetails(songId) async {
   }
   has_320 = getMain[songId]["more_info"]["320kbps"];
   kUrl = await DesPlugin.decrypt(key, getMain[songId]["more_info"]["encrypted_media_url"]);
-  kUrl = kUrl.replaceAll("aac.saavncdn.com", "h.saavncdn.com").replaceAll("c.saavncdn.com", "h.saavncdn.com");
+  //kUrl = kUrl.replaceAll("aac.saavncdn.com", "h.saavncdn.com").replaceAll("c.saavncdn.com", "h.saavncdn.com");
   raw_kUrl = kUrl;
 
   final client = http.Client();
