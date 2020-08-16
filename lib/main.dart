@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music/style/appColors.dart';
-import 'package:music/ui/musify.dart';
+import 'package:Musify/style/appColors.dart';
+import 'package:Musify/ui/musify.dart';
 
 main() async {
   runApp(

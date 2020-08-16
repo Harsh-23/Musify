@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:music/helper/utils.dart';
-import 'package:music/style/appColors.dart';
+import 'package:Musify/helper/utils.dart';
+import 'package:Musify/style/appColors.dart';
 
 class AboutPage extends StatelessWidget {
   @override
