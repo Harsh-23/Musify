@@ -60,7 +60,8 @@ class AboutCards extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 6),
+            padding:
+                const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 6),
             child: Column(
               children: <Widget>[
                 ListTile(
@@ -72,8 +73,11 @@ class AboutCards extends StatelessWidget {
                     padding: const EdgeInsets.all(13.0),
                     child: Center(
                       child: Text(
-                        "Musify  | 2.0.0",
-                        style: TextStyle(color: accentLight, fontSize: 24, fontWeight: FontWeight.w600),
+                        "Musify  | 2.1.0",
+                        style: TextStyle(
+                            color: accentLight,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -89,10 +93,12 @@ class AboutCards extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
             child: Card(
               color: Color(0xff263238),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               elevation: 2.3,
               child: ListTile(
                 leading: Container(
@@ -123,7 +129,7 @@ class AboutCards extends StatelessWidget {
                       ),
                       tooltip: 'Contact on Telegram',
                       onPressed: () {
-                        launchURL("https://t.me/harshv23");
+                        launchURL("https://telegram.dog/harshv23");
                       },
                     ),
                     IconButton(
@@ -142,7 +148,8 @@ class AboutCards extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
             child: Card(
               color: Color(0xff263238),
               shape: RoundedRectangleBorder(
@@ -157,7 +164,8 @@ class AboutCards extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage("https://telegram.im/img/cyberboysumanjay"),
+                      image: NetworkImage(
+                          "https://telegra.ph/file/a64152b2fae1bf6e7d98e.jpg"),
                     ),
                   ),
                 ),
@@ -178,7 +186,7 @@ class AboutCards extends StatelessWidget {
                       ),
                       tooltip: 'Contact on Telegram',
                       onPressed: () {
-                        launchURL("https://t.me/cyberboysumanjay");
+                        launchURL("https://telegram.dog/cyberboysumanjay");
                       },
                     ),
                     IconButton(
@@ -189,6 +197,120 @@ class AboutCards extends StatelessWidget {
                       tooltip: 'Contact on Twitter',
                       onPressed: () {
                         launchURL("https://twitter.com/cyberboysj");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            child: Card(
+              color: Color(0xff263238),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 2.3,
+              child: ListTile(
+                leading: Container(
+                  width: 50.0,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                          "https://avatars1.githubusercontent.com/u/53393418?v=4"),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Dhruvan Bhalara',
+                  style: TextStyle(color: accentLight),
+                ),
+                subtitle: Text(
+                  'Contributor',
+                  style: TextStyle(color: accentLight),
+                ),
+                trailing: Wrap(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        MdiIcons.telegram,
+                        color: accentLight,
+                      ),
+                      tooltip: 'Contact on Telegram',
+                      onPressed: () {
+                        launchURL("https://t.me/dhruvanbhalara");
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        MdiIcons.twitter,
+                        color: accentLight,
+                      ),
+                      tooltip: 'Contact on Twitter',
+                      onPressed: () {
+                        launchURL("https://twitter.com/dhruvanbhalara");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+            child: Card(
+              color: Color(0xff263238),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 2.3,
+              child: ListTile(
+                leading: Container(
+                  width: 50.0,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                          "https://avatars3.githubusercontent.com/u/6892756?v=4"),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Kapil Jhajhria',
+                  style: TextStyle(color: accentLight),
+                ),
+                subtitle: Text(
+                  'Contributor',
+                  style: TextStyle(color: accentLight),
+                ),
+                trailing: Wrap(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        MdiIcons.telegram,
+                        color: accentLight,
+                      ),
+                      tooltip: 'Contact on Telegram',
+                      onPressed: () {
+                        launchURL("https://telegram.dog/kapiljhajhria");
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        MdiIcons.twitter,
+                        color: accentLight,
+                      ),
+                      tooltip: 'Contact on Twitter',
+                      onPressed: () {
+                        launchURL("https://twitter.com/kapiljhajhria");
                       },
                     ),
                   ],
