@@ -15,9 +15,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:Musify/API/saavn.dart';
 import 'package:Musify/music.dart';
 import 'package:Musify/style/appColors.dart';
-import 'package:Musify/ui/about.dart';
+import 'package:Musify/ui/aboutPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+
+final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
 
 class Musify extends StatefulWidget {
   @override
@@ -34,7 +36,7 @@ class AppState extends State<Musify> {
     super.initState();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Color(0xff263238),
+      systemNavigationBarColor: Color(0xff1c252a),
       statusBarColor: Colors.transparent,
     ));
 
@@ -72,7 +74,12 @@ class AppState extends State<Musify> {
   }
 
   getSongDetails(String id, var context) async {
-    await fetchSongDetails(id);
+    try {
+      await fetchSongDetails(id);
+    } catch (e) {
+      artist = "Unknown";
+      print(e);
+    }
     checker = "Haa";
     Navigator.push(
       context,
@@ -124,28 +131,21 @@ class AppState extends State<Musify> {
       final filename = title + ".m4a";
       final artname = title + "_artwork.jpg";
       //Directory appDocDir = await getExternalStorageDirectory();
-      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
-          ExtStorage.DIRECTORY_MUSIC);
-      await File(dlPath + "/" + filename)
-          .create(recursive: true)
-          .then((value) => filepath = value.path);
-      await File(dlPath + "/" + artname)
-          .create(recursive: true)
-          .then((value) => filepath2 = value.path);
+      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
+      await File(dlPath + "/" + filename).create(recursive: true).then((value) => filepath = value.path);
+      await File(dlPath + "/" + artname).create(recursive: true).then((value) => filepath2 = value.path);
       debugPrint('Audio path $filepath');
       debugPrint('Image path $filepath2');
       if (has_320 == "true") {
         kUrl = rawkUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
-        final request = http.Request('HEAD', Uri.parse(kUrl))
-          ..followRedirects = false;
+        final request = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
         final response = await client.send(request);
         debugPrint(response.statusCode.toString());
         kUrl = (response.headers['location']);
         debugPrint(rawkUrl);
         debugPrint(kUrl);
-        final request2 = http.Request('HEAD', Uri.parse(kUrl))
-          ..followRedirects = false;
+        final request2 = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
         final response2 = await client.send(request2);
         if (response2.statusCode != 200) {
           kUrl = kUrl.replaceAll(".mp4", ".mp3");
@@ -188,13 +188,7 @@ class AppState extends State<Musify> {
       }
       debugPrint("Done");
       Fluttertoast.showToast(
-          msg: "Download Complete!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Color(0xff61e88a),
-          fontSize: 14.0);
+          msg: "Download Complete!", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Color(0xff61e88a), fontSize: 14.0);
     } else if (status.isDenied || status.isPermanentlyDenied) {
       Fluttertoast.showToast(
           msg: "Storage Permission Denied!\nCan't Download Songs",
@@ -234,85 +228,81 @@ class AppState extends State<Musify> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.transparent,
         //backgroundColor: Color(0xff384850),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          child: Builder(builder: (contextt) {
-            return Container(
-              height: 50,
-              width: 180,
-              child: FloatingActionButton(
-                isExtended: true,
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 100,
-                  width: 180,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(40),
+        bottomNavigationBar: Container(
+          height: kUrl != "" ? 75 : 0,
+          color: Color(0xff1c252a),
+
+          //decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)), color: Color(0xff1c252a)),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 5.0, bottom: 2),
+            child: GestureDetector(
+              onTap: () {
+                checker = "Nahi";
+                if (kUrl != "") {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AudioApp()),
+                  );
+                }
+              },
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, top: 7, bottom: 7, right: 15),
+                    //child: Image.network("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        image,
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4db6ac),
-                        //Color(0xff00c754),
-                        Color(0xff61e88a),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          title,
+                          style: TextStyle(color: accent, fontSize: 17, fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          artist,
+                          style: TextStyle(color: accentLight, fontSize: 15),
+                        )
                       ],
                     ),
                   ),
-                  child: Center(
-                    child: Container(
-                      width: 130,
-                      child: Center(
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              MdiIcons.musicNoteOutline,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              " Now Playing",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                onPressed: () => {
-                  checker = "Nahi",
-                  if (kUrl != "")
-                    {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AudioApp()),
-                      )
-                    }
-                  else
-                    Scaffold.of(contextt).showSnackBar(
-                      SnackBar(
-                        content: Text("Nothing is Playing."),
-                        action: SnackBarAction(
-                            label: 'Okay',
-                            textColor: accent,
-                            onPressed:
-                                Scaffold.of(contextt).hideCurrentSnackBar),
-                        backgroundColor: Colors.black38,
-                        duration: Duration(seconds: 2),
-                      ),
-                    )
-                },
-                tooltip: 'Now Playing',
+                  Spacer(),
+                  IconButton(
+                    icon: playerState == PlayerState.playing ? Icon(MdiIcons.pause) : Icon(MdiIcons.playOutline),
+                    color: accent,
+                    splashColor: Colors.transparent,
+                    onPressed: () {
+                      setState(() {
+                        if (playerState == PlayerState.playing) {
+                          audioPlayer.pause();
+                          playerState = PlayerState.paused;
+                          MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: false);
+                        } else if (playerState == PlayerState.paused) {
+                          audioPlayer.play(kUrl);
+                          playerState = PlayerState.playing;
+                          MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: true);
+                        }
+                      });
+                    },
+                    iconSize: 45,
+                  )
+                ],
               ),
-            );
-          }),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(12.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 30, bottom: 20.0)),
               Center(
@@ -388,8 +378,7 @@ class AppState extends State<Musify> {
                             width: 18,
                             child: Center(
                               child: CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(accent),
+                                valueColor: AlwaysStoppedAnimation<Color>(accent),
                               ),
                             ),
                           )
@@ -415,66 +404,62 @@ class AppState extends State<Musify> {
                   ),
                 ),
               ),
-              if (searchedList.isNotEmpty)
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: searchedList.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Card(
-                        color: Colors.black12,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 0,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(10.0),
-                          onTap: () {
-                            getSongDetails(searchedList[index]["id"], context);
-                          },
-                          splashColor: accent,
-                          hoverColor: accent,
-                          focusColor: accent,
-                          highlightColor: accent,
-                          child: Column(
-                            children: <Widget>[
-                              ListTile(
-                                leading: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    MdiIcons.musicNoteOutline,
-                                    size: 30,
-                                    color: accent,
+              searchedList.isNotEmpty
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: searchedList.length,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Card(
+                            color: Colors.black12,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            elevation: 0,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(10.0),
+                              onTap: () {
+                                getSongDetails(searchedList[index]["id"], context);
+                              },
+                              splashColor: accent,
+                              hoverColor: accent,
+                              focusColor: accent,
+                              highlightColor: accent,
+                              child: Column(
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        MdiIcons.musicNoteOutline,
+                                        size: 30,
+                                        color: accent,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      (searchedList[index]['title']).toString().split("(")[0].replaceAll("&quot;", "\"").replaceAll("&amp;", "&"),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    subtitle: Text(
+                                      searchedList[index]['more_info']["singers"],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    trailing: IconButton(
+                                      color: accent,
+                                      icon: Icon(MdiIcons.downloadOutline),
+                                      onPressed: () => downloadSong(searchedList[index]["id"]),
+                                    ),
                                   ),
-                                ),
-                                title: Text(
-                                  (searchedList[index]['title'])
-                                      .toString()
-                                      .split("(")[0]
-                                      .replaceAll("&quot;", "\"")
-                                      .replaceAll("&amp;", "&"),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                subtitle: Text(
-                                  searchedList[index]['more_info']["singers"],
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                trailing: IconButton(
-                                  color: accent,
-                                  icon: Icon(MdiIcons.downloadOutline),
-                                  onPressed: () =>
-                                      downloadSong(searchedList[index]["id"]),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    )
+                  : Container(),
             ],
           ),
         ),
