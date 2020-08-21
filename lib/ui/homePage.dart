@@ -459,7 +459,53 @@ class AppState extends State<Musify> {
                         );
                       },
                     )
-                  : Container(),
+                  : Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30.0, bottom: 10, left: 8),
+                            child: Text(
+                              "Top 15 Songs",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: accent,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                            height: MediaQuery.of(context).size.height * 0.18,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: numbers.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           ),
         ),
