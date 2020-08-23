@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:audiotagger/audiotagger.dart';
 import 'package:audiotagger/models/tag.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -267,8 +268,8 @@ class AppState extends State<Musify> {
                           //child: Image.network("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              image,
+                            child: CachedNetworkImage(
+                              imageUrl: image,
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -535,7 +536,7 @@ class AppState extends State<Musify> {
                                             BorderRadius.circular(10.0),
                                         image: DecorationImage(
                                           fit: BoxFit.fill,
-                                          image: NetworkImage(
+                                          image: CachedNetworkImageProvider(
                                               "https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
                                         ),
                                       ),
