@@ -28,10 +28,10 @@ Future fetchSongDetails(songId) async {
 
   title = (getMain[songId]["title"]).toString().split("(")[0].replaceAll("&amp;", "&").replaceAll("&#039;", "'").replaceAll("&quot;", "\"");
   image = (getMain[songId]["image"]).replaceAll("150x150", "500x500");
-  debugPrint((getMain[songId]["more_info"]["artistMap"]).toString());
+  //debugPrint((getMain[songId]["more_info"]["artistMap"]).toString());
   album = (getMain[songId]["more_info"]["album"]).toString().replaceAll("&quot;", "\"").replaceAll("&#039;", "'").replaceAll("&amp;", "&");
-
-  if (getMain[songId]["more_info"]["has_lyrics"] == "true") {
+  print(getMain[songId]["more_info"]["has_lyrics"]);
+  if (getMain[songId]["more_info"]["has_lyrics"] == true) {
     String lyricsUrl = "https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&lyrics_id=" + songId + "&ctx=web6dot0&api_version=4&_format=json";
     var lyricsRes = await http.get(lyricsUrl, headers: {"Accept": "application/json"});
     var lyricsEdited = (lyricsRes.body).split("-->");
@@ -43,7 +43,7 @@ Future fetchSongDetails(songId) async {
     var lyricsApiRes = await http.get(lyricsApiUrl, headers: {"Accept": "application/json"});
 
     var lyricsResponse = json.decode(lyricsApiRes.body);
-    if (lyricsResponse['status'] && lyricsResponse['lyrics'] != null) {
+    if (lyricsResponse['status'] == "true" && lyricsResponse['lyrics'] != null) {
       lyrics = lyricsResponse['lyrics'];
     } else {
       lyrics = 'null';
@@ -58,7 +58,9 @@ Future fetchSongDetails(songId) async {
   final client = http.Client();
   final request = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
   final response = await client.send(request);
+  print(response);
   kUrl = (response.headers['location']);
+  print(kUrl);
   artist = (getMain[songId]["more_info"]["artistMap"]["primary_artists"][0]["name"]).toString().replaceAll("&quot;", "\"").replaceAll("&#039;", "'").replaceAll("&amp;", "&");
   debugPrint(kUrl);
 }
