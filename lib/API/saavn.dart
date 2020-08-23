@@ -52,7 +52,21 @@ Future<List> topSongs() async {
       await http.get(topSongsUrl, headers: {"Accept": "application/json"});
   var songsList = json.decode(songsListJSON.body);
   topSongsList = songsList["list"];
-
+  for (int i = 0; i < topSongsList.length; i++) {
+    topSongsList[i]['title'] = topSongsList[i]['title']
+        .toString()
+        .replaceAll("&amp;", "&")
+        .replaceAll("&#039;", "'")
+        .replaceAll("&quot;", "\"");
+    topSongsList[i]["more_info"]["artistMap"]["primary_artists"][0]["name"] =
+        topSongsList[i]["more_info"]["artistMap"]["primary_artists"][0]["name"]
+            .toString()
+            .replaceAll("&amp;", "&")
+            .replaceAll("&#039;", "'")
+            .replaceAll("&quot;", "\"");
+    topSongsList[i]['image'] =
+        topSongsList[i]['image'].toString().replaceAll("150x150", "500x500");
+  }
   return topSongsList;
 }
 
