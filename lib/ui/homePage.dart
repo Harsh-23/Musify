@@ -131,21 +131,28 @@ class AppState extends State<Musify> {
       final filename = title + ".m4a";
       final artname = title + "_artwork.jpg";
       //Directory appDocDir = await getExternalStorageDirectory();
-      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
-      await File(dlPath + "/" + filename).create(recursive: true).then((value) => filepath = value.path);
-      await File(dlPath + "/" + artname).create(recursive: true).then((value) => filepath2 = value.path);
+      String dlPath = await ExtStorage.getExternalStoragePublicDirectory(
+          ExtStorage.DIRECTORY_MUSIC);
+      await File(dlPath + "/" + filename)
+          .create(recursive: true)
+          .then((value) => filepath = value.path);
+      await File(dlPath + "/" + artname)
+          .create(recursive: true)
+          .then((value) => filepath2 = value.path);
       debugPrint('Audio path $filepath');
       debugPrint('Image path $filepath2');
       if (has_320 == "true") {
         kUrl = rawkUrl.replaceAll("_96.mp4", "_320.mp4");
         final client = http.Client();
-        final request = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
+        final request = http.Request('HEAD', Uri.parse(kUrl))
+          ..followRedirects = false;
         final response = await client.send(request);
         debugPrint(response.statusCode.toString());
         kUrl = (response.headers['location']);
         debugPrint(rawkUrl);
         debugPrint(kUrl);
-        final request2 = http.Request('HEAD', Uri.parse(kUrl))..followRedirects = false;
+        final request2 = http.Request('HEAD', Uri.parse(kUrl))
+          ..followRedirects = false;
         final response2 = await client.send(request2);
         if (response2.statusCode != 200) {
           kUrl = kUrl.replaceAll(".mp4", ".mp3");
@@ -188,7 +195,13 @@ class AppState extends State<Musify> {
       }
       debugPrint("Done");
       Fluttertoast.showToast(
-          msg: "Download Complete!", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Color(0xff61e88a), fontSize: 14.0);
+          msg: "Download Complete!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Color(0xff61e88a),
+          fontSize: 14.0);
     } else if (status.isDenied || status.isPermanentlyDenied) {
       Fluttertoast.showToast(
           msg: "Storage Permission Denied!\nCan't Download Songs",
@@ -228,78 +241,95 @@ class AppState extends State<Musify> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.transparent,
         //backgroundColor: Color(0xff384850),
-        bottomNavigationBar: Container(
-          height: kUrl != "" ? 75 : 0,
-          color: Color(0xff1c252a),
+        bottomNavigationBar: playerState == PlayerState.playing
+            ? Container(
+                height: kUrl != "" ? 75 : 0,
+                color: Color(0xff1c252a),
 
-          //decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)), color: Color(0xff1c252a)),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 2),
-            child: GestureDetector(
-              onTap: () {
-                checker = "Nahi";
-                if (kUrl != "") {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AudioApp()),
-                  );
-                }
-              },
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, top: 7, bottom: 7, right: 15),
-                    //child: Image.network("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                //decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)), color: Color(0xff1c252a)),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0, bottom: 2),
+                  child: GestureDetector(
+                    onTap: () {
+                      checker = "Nahi";
+                      if (kUrl != "") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AudioApp()),
+                        );
+                      }
+                    },
+                    child: Row(
                       children: <Widget>[
-                        Text(
-                          title,
-                          style: TextStyle(color: accent, fontSize: 17, fontWeight: FontWeight.w600),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, top: 7, bottom: 7, right: 15),
+                          //child: Image.network("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              image,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
-                        Text(
-                          artist,
-                          style: TextStyle(color: accentLight, fontSize: 15),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 0.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                title,
+                                style: TextStyle(
+                                    color: accent,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                artist,
+                                style:
+                                    TextStyle(color: accentLight, fontSize: 15),
+                              )
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        IconButton(
+                          icon: playerState == PlayerState.playing
+                              ? Icon(MdiIcons.pause)
+                              : Icon(MdiIcons.playOutline),
+                          color: accent,
+                          splashColor: Colors.transparent,
+                          onPressed: () {
+                            setState(() {
+                              if (playerState == PlayerState.playing) {
+                                audioPlayer.pause();
+                                playerState = PlayerState.paused;
+                                MediaNotification.showNotification(
+                                    title: title,
+                                    author: artist,
+                                    artUri: image,
+                                    isPlaying: false);
+                              } else if (playerState == PlayerState.paused) {
+                                audioPlayer.play(kUrl);
+                                playerState = PlayerState.playing;
+                                MediaNotification.showNotification(
+                                    title: title,
+                                    author: artist,
+                                    artUri: image,
+                                    isPlaying: true);
+                              }
+                            });
+                          },
+                          iconSize: 45,
                         )
                       ],
                     ),
                   ),
-                  Spacer(),
-                  IconButton(
-                    icon: playerState == PlayerState.playing ? Icon(MdiIcons.pause) : Icon(MdiIcons.playOutline),
-                    color: accent,
-                    splashColor: Colors.transparent,
-                    onPressed: () {
-                      setState(() {
-                        if (playerState == PlayerState.playing) {
-                          audioPlayer.pause();
-                          playerState = PlayerState.paused;
-                          MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: false);
-                        } else if (playerState == PlayerState.paused) {
-                          audioPlayer.play(kUrl);
-                          playerState = PlayerState.playing;
-                          MediaNotification.showNotification(title: title, author: artist, artUri: image, isPlaying: true);
-                        }
-                      });
-                    },
-                    iconSize: 45,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
+              )
+            : SizedBox.shrink(),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(12.0),
           child: Column(
@@ -378,7 +408,8 @@ class AppState extends State<Musify> {
                             width: 18,
                             child: Center(
                               child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(accent),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(accent),
                               ),
                             ),
                           )
@@ -421,7 +452,8 @@ class AppState extends State<Musify> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10.0),
                               onTap: () {
-                                getSongDetails(searchedList[index]["id"], context);
+                                getSongDetails(
+                                    searchedList[index]["id"], context);
                               },
                               splashColor: accent,
                               hoverColor: accent,
@@ -439,17 +471,23 @@ class AppState extends State<Musify> {
                                       ),
                                     ),
                                     title: Text(
-                                      (searchedList[index]['title']).toString().split("(")[0].replaceAll("&quot;", "\"").replaceAll("&amp;", "&"),
+                                      (searchedList[index]['title'])
+                                          .toString()
+                                          .split("(")[0]
+                                          .replaceAll("&quot;", "\"")
+                                          .replaceAll("&amp;", "&"),
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     subtitle: Text(
-                                      searchedList[index]['more_info']["singers"],
+                                      searchedList[index]['more_info']
+                                          ["singers"],
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     trailing: IconButton(
                                       color: accent,
                                       icon: Icon(MdiIcons.downloadOutline),
-                                      onPressed: () => downloadSong(searchedList[index]["id"]),
+                                      onPressed: () => downloadSong(
+                                          searchedList[index]["id"]),
                                     ),
                                   ),
                                 ],
@@ -464,7 +502,8 @@ class AppState extends State<Musify> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(top: 30.0, bottom: 10, left: 8),
+                            padding: const EdgeInsets.only(
+                                top: 30.0, bottom: 10, left: 8),
                             child: Text(
                               "Top 15 Songs",
                               textAlign: TextAlign.left,
@@ -483,7 +522,8 @@ class AppState extends State<Musify> {
                               itemCount: numbers.length,
                               itemBuilder: (context, index) {
                                 return Container(
-                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   child: Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0),
@@ -491,10 +531,12 @@ class AppState extends State<Musify> {
                                     color: Colors.transparent,
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                         image: DecorationImage(
                                           fit: BoxFit.fill,
-                                          image: NetworkImage("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+                                          image: NetworkImage(
+                                              "https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
                                         ),
                                       ),
                                     ),
