@@ -20,8 +20,6 @@ import 'package:Musify/ui/aboutPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
-
 class Musify extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -346,18 +344,19 @@ class AppState extends State<Musify> {
                   ),
                   Container(
                     child: IconButton(
-                        iconSize: 26,
-                        alignment: Alignment.center,
-                        icon: Icon(MdiIcons.dotsVertical),
-                        color: accent,
-                        onPressed: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AboutPage(),
-                                ),
-                              ),
-                            }),
+                      iconSize: 26,
+                      alignment: Alignment.center,
+                      icon: Icon(MdiIcons.dotsVertical),
+                      color: accent,
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AboutPage(),
+                          ),
+                        ),
+                      },
+                    ),
                   )
                 ]),
               ),
@@ -441,6 +440,9 @@ class AppState extends State<Musify> {
                               onTap: () {
                                 getSongDetails(searchedList[index]["id"], context);
                               },
+                              onLongPress: () {
+                                topSongs();
+                              },
                               splashColor: accent,
                               hoverColor: accent,
                               focusColor: accent,
@@ -477,35 +479,49 @@ class AppState extends State<Musify> {
                         );
                       },
                     )
-                  : Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30.0, bottom: 10, left: 8),
-                            child: Text(
-                              "Top 15 Songs",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: accent,
-                                fontWeight: FontWeight.w600,
-                              ),
+                  : FutureBuilder(
+                      future: topSongs(),
+                      builder: (context, data) {
+                        if (data.hasData)
+                          return Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 30.0, bottom: 10, left: 8),
+                                  child: Text(
+                                    "Top 15 Songs",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      color: accent,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                                  height: MediaQuery.of(context).size.height * 0.22,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 15,
+                                    itemBuilder: (context, index) {
+                                      return getTopSong(
+                                          data.data[index]["image"], data.data[index]["title"], data.data[index]["more_info"]["artistMap"]["primary_artists"][0]["name"], data.data[index]["id"]);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
+                          );
+                        return Center(
+                            child: Padding(
+                          padding: const EdgeInsets.all(35.0),
+                          child: CircularProgressIndicator(
+                            valueColor: new AlwaysStoppedAnimation<Color>(accent),
                           ),
-                          Container(
-                            //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-                            height: MediaQuery.of(context).size.height * 0.20,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: numbers.length,
-                              itemBuilder: (context, index) {
-                                return getTopSong();
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                        ));
+                      },
                     ),
             ],
           ),
@@ -514,51 +530,56 @@ class AppState extends State<Musify> {
     );
   }
 
-  Widget getTopSong() {
-    return Column(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.15,
-          width: MediaQuery.of(context).size.width * 0.4,
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            color: Colors.transparent,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: CachedNetworkImageProvider("https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+  Widget getTopSong(String image, String title, String subtitle, String id) {
+    return InkWell(
+      onTap: () {
+        getSongDetails(id, context);
+      },
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.17,
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              color: Colors.transparent,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: CachedNetworkImageProvider(image),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 2,
-        ),
-        Text(
-          'Song name',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
+          SizedBox(
+            height: 2,
           ),
-        ),
-        SizedBox(
-          height: 2,
-        ),
-        Text(
-          'Song name',
-          style: TextStyle(
-            color: Colors.white38,
-            fontSize: 12.0,
-            fontWeight: FontWeight.bold,
+          Text(
+            title.split("(")[0].replaceAll("&amp;", "&").replaceAll("&#039;", "'").replaceAll("&quot;", "\""),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-      ],
+          SizedBox(
+            height: 2,
+          ),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.white38,
+              fontSize: 12.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
