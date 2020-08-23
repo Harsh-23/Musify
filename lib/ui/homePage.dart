@@ -517,31 +517,61 @@ class AppState extends State<Musify> {
                           ),
                           Container(
                             //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-                            height: MediaQuery.of(context).size.height * 0.18,
+                            height: MediaQuery.of(context).size.height * 0.20,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: numbers.length,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    color: Colors.transparent,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: CachedNetworkImageProvider(
-                                              "https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+                                return Column(
+                                  children: [
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        color: Colors.transparent,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: CachedNetworkImageProvider(
+                                                  "https://sgdccdnems06.cdnsrv.jio.com/c.saavncdn.com/830/Music-To-Be-Murdered-By-English-2020-20200117040807-500x500.jpg"),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(
+                                      'Song name',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(
+                                      'Song name',
+                                      style: TextStyle(
+                                        color: Colors.white38,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 );
                               },
                             ),
