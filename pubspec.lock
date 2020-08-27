@@ -230,15 +230,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.1"
-  flutter_media_notification:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: master
-      resolved-ref: "938b14c94b545ff30711e77f495e84a393af5464"
-      url: "https://github.com/Sj-Projects/flutter_media_notification.git"
-    source: git
-    version: "1.2.6"
   flutter_test:
     dependency: "direct dev"
     description: flutter

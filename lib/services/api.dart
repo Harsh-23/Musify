@@ -8,7 +8,7 @@ import "package:flutter/material.dart";
 final Dio dio = Dio(
   BaseOptions(
     baseUrl: "https://www.jiosaavn.com",
-    headers: {'x-access-token': 'YYvnqg2l6R48uTUr1NcxRauZ79KGikhD'},
+    headers: {"contentType": "application/json"},
   ),
 )..interceptors.add(DioCacheManager(
     CacheConfig(
@@ -24,7 +24,18 @@ Future<List> getTopSongs() async {
   // print(resp.data);
 
   final data = json.decode(resp.data);
-  print(data["list"]);
 
   return data["list"].map((song) => Song.fromJSON(song)).toList();
+}
+
+Future<List> searchSong(String query) async {
+  String searchUrl =
+      "/api.php?__call=autocomplete.get&query=hello&_format=json&_marker=0&ctx=web6dot0";
+  final Response resp = await dio.get(searchUrl);
+
+
+  final data = jsonDecode(resp.data);
+  print(data["songs"]["data"]);
+
+  return data["songs"]['data'].map((song) => Song.fromJSON(song)).toList();
 }

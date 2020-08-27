@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:Musify/widgets/player.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audiotagger/audiotagger.dart';
 import 'package:audiotagger/models/tag.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,7 +10,6 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +17,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import '../services/saavn.dart';
 import '../services/api.dart';
 
-import 'package:Musify/music.dart';
+// import 'package:Musify/music.dart';
 import 'package:Musify/style/appColors.dart';
 import '../screens/aboutPage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -41,27 +42,27 @@ class AppState extends State<Musify> {
       statusBarColor: Colors.transparent,
     ));
 
-    MediaNotification.setListener('play', () {
-      setState(() {
-        playerState = PlayerState.playing;
-        status = 'play';
-        audioPlayer.play(kUrl);
-      });
-    });
+    // MediaNotification.setListener('play', () {
+    //   setState(() {
+    //     playerState = PlayerState.playing;
+    //     status = 'play';
+    //     audioPlayer.play(kUrl);
+    //   });
+    // });
 
-    MediaNotification.setListener('pause', () {
-      setState(() {
-        status = 'pause';
-        audioPlayer.pause();
-      });
-    });
+    // MediaNotification.setListener('pause', () {
+    //   setState(() {
+    //     status = 'pause';
+    //     audioPlayer.pause();
+    //   });
+    // });
 
-    MediaNotification.setListener("close", () {
-      audioPlayer.stop();
-      dispose();
-      checker = "Nahi";
-      MediaNotification.hideNotification();
-    });
+    // MediaNotification.setListener("close", () {
+    //   audioPlayer.stop();
+    //   dispose();
+    //   checker = "Nahi";
+    //   MediaNotification.hideNotification();
+    // });
   }
 
   search() async {
@@ -69,7 +70,7 @@ class AppState extends State<Musify> {
     if (searchQuery.isEmpty) return;
     fetchingSongs = true;
     setState(() {});
-    await fetchSongsList(searchQuery);
+    await searchSong(searchQuery);
     fetchingSongs = false;
     setState(() {});
   }
@@ -88,7 +89,7 @@ class AppState extends State<Musify> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AudioApp(),
+        builder: (context) => MusifyPlayer(),
       ),
     );
   }
@@ -262,7 +263,7 @@ class AppState extends State<Musify> {
                       if (kUrl != "") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AudioApp()),
+                          MaterialPageRoute(builder: (context) => MusifyPlayer()),
                         );
                       }
                     },
@@ -316,29 +317,29 @@ class AppState extends State<Musify> {
                         ),
                         Spacer(),
                         IconButton(
-                          icon: playerState == PlayerState.playing
+                          icon: playerState == PlayerState.play
                               ? Icon(MdiIcons.pause)
                               : Icon(MdiIcons.playOutline),
                           color: accent,
                           splashColor: Colors.transparent,
                           onPressed: () {
                             setState(() {
-                              if (playerState == PlayerState.playing) {
-                                audioPlayer.pause();
-                                playerState = PlayerState.paused;
-                                MediaNotification.showNotification(
-                                    title: title,
-                                    author: artist,
-                                    artUri: image,
-                                    isPlaying: false);
-                              } else if (playerState == PlayerState.paused) {
-                                audioPlayer.play(kUrl);
-                                playerState = PlayerState.playing;
-                                MediaNotification.showNotification(
-                                    title: title,
-                                    author: artist,
-                                    artUri: image,
-                                    isPlaying: true);
+                              if (playerState == PlayerState.play) {
+                                // audioPlayer.pause();
+                                // playerState = PlayerState.paused;
+                                // MediaNotification.showNotification(
+                                //     title: title,
+                                //     author: artist,
+                                //     artUri: image,
+                                //     isPlaying: false);
+                              } else if (playerState == PlayerState.pause) {
+                                // audioPlayer.play(kUrl);
+                                // playerState = PlayerState.playing;
+                                // MediaNotification.showNotification(
+                                //     title: title,
+                                //     author: artist,
+                                //     artUri: image,
+                                //     isPlaying: true);
                               }
                             });
                           },
