@@ -508,7 +508,7 @@ class AppState extends State<Musify> {
                                 ),
                                 Container(
                                   //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-                                  height: MediaQuery.of(context).size.height * 0.295,
+                                  height: MediaQuery.of(context).size.height * 0.3,
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
@@ -547,8 +547,13 @@ class AppState extends State<Musify> {
       onTap: () {
         getSongDetails(id, context);
       },
+      splashColor: accent,
+      hoverColor: accent,
+      focusColor: accent,
+      highlightColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(10.0),
       child: Container(
-        margin: EdgeInsets.only(right: 8),
+        margin: EdgeInsets.only(right: 4, left: 4, top: 4),
         height: MediaQuery.of(context).size.height * 0.25,
         width: MediaQuery.of(context).size.width * 0.4,
         child: Column(
@@ -576,6 +581,7 @@ class AppState extends State<Musify> {
               height: 2,
             ),
             Text(
+              //title.split("-")[0].split("(")[0] + "\n" + title.split("- ")[1].split(",")[0],
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
