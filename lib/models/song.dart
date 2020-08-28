@@ -1,3 +1,5 @@
+import 'package:Musify/helper/utils.dart';
+
 class Song {
   String id;
   String title;
@@ -10,10 +12,10 @@ class Song {
 
   Song.fromJSON(Map<String, dynamic> json) {
     id = json["id"];
-    title = json["title"];
-    title = json["subtitle"] ?? "";
-    type = json["type"];
-    image = json["image"] ?? "";
+    title = fixHtmlChars(json["title"]);
+    title = fixHtmlChars(json["subtitle"]) ?? "";
+    type = fixHtmlChars(json["type"]);
+    image = imageQuality(json["image"]) ?? "";
     url = json["perma_url"];
   }
 }
