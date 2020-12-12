@@ -111,7 +111,7 @@ Future fetchSongDetails(songId) async {
   } else {
     lyrics = "null";
     String lyricsApiUrl =
-        "https://sumanjay.vercel.app/lyrics/" + artist + "/" + title;
+        "https://musifydev.vercel.app/lyrics/" + artist + "/" + title;
     var lyricsApiRes =
         await http.get(lyricsApiUrl, headers: {"Accept": "application/json"});
     var lyricsResponse = json.decode(lyricsApiRes.body);
