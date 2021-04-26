@@ -41,10 +41,6 @@ dependencies:
   url_launcher: ^5.5.0
   permission_handler: ^5.0.1+1
   fluttertoast: ^7.0.2
-  flutter_media_notification:
-    git:
-      url: https://github.com/Sj-Projects/flutter_media_notification.git
-      ref: master
   cached_network_image: ^2.2.0+1
 
 dev_dependencies:
